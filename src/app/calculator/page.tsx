@@ -40,6 +40,16 @@ export default function CalculatorPage() {
         console.error("Failed to parse sessionStorage data:", error);
         setMode('manual');
     }
+    
+    const handleBeforeUnload = () => {
+      sessionStorage.removeItem('extractedData');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
   }, []);
 
   const calculateGrade = (totalMarks: number) => {
