@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AppLayout } from '@/components/layout';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 export const metadata: Metadata = {
   title: 'SGPA Assistant',
@@ -28,9 +29,11 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <AppLayout>
-            {children}
-        </AppLayout>
+        <SidebarProvider>
+          <AppLayout>
+              {children}
+          </AppLayout>
+        </SidebarProvider>
         <Toaster />
       </body>
     </html>

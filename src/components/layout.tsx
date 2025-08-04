@@ -13,7 +13,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
-  SidebarProvider,
   SidebarTrigger,
   SidebarInset,
 } from "@/components/ui/sidebar";
@@ -35,7 +34,7 @@ export function AppLayout({ children }: {children: React.ReactNode}) {
   const pathname = usePathname();
 
   return (
-    <SidebarProvider>
+    <>
         <style>
           {`
             :root {
@@ -156,7 +155,6 @@ export function AppLayout({ children }: {children: React.ReactNode}) {
                 </div>
             </main>
         </SidebarInset>
-      </div>
-    </SidebarProvider>
+    </>
   );
 }
