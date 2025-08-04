@@ -21,10 +21,13 @@ export type FetchCreditsInput = z.infer<typeof FetchCreditsInputSchema>;
 
 const FetchCreditsOutputSchema = z.object({
   credits: z
-    .record(z.string(), z.number())
-    .describe(
-      'A mapping of subject codes to their corresponding credit values.'
-    ),
+    .array(
+      z.object({
+        subjectCode: z.string().describe('The subject code.'),
+        credit: z.number().describe('The credit value for the subject.'),
+      })
+    )
+    .describe('An array of objects, each containing a subject code and its credit value.'),
 });
 export type FetchCreditsOutput = z.infer<typeof FetchCreditsOutputSchema>;
 

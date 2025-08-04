@@ -42,11 +42,12 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
       }
 
       const result = await fetchCredits({ subjectCodes });
+      const creditsMap = new Map(result.credits.map(c => [c.subjectCode.toUpperCase(), c.credit]));
       
       const newCredits : {[key: number]: number} = {};
       subjects.forEach((subject, index) => {
         const subjectCode = subject.subjectCode.toUpperCase();
-        let creditValue = result.credits[subjectCode];
+        let creditValue = creditsMap.get(subjectCode);
         
         if (creditValue === undefined) {
            // Fallback logic if AI doesn't return a value for a specific code
