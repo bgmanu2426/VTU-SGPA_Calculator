@@ -14,9 +14,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Calculator, Medal, RotateCcw, Users } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Switch } from './ui/switch';
-import { Label } from './ui/label';
+import dynamic from 'next/dynamic';
 
 const semesterSchema = z.object({
   sgpa: z.coerce.number().min(0, 'SGPA must be positive').max(10, "SGPA can't exceed 10").optional(),
@@ -30,9 +30,7 @@ const cgpaCalculationSchema = z.object({
 
 type CgpaFormValues = z.infer<typeof cgpaCalculationSchema>;
 
-export function CgpaCalculator() {
-  const [cgpa, setCgpa] = useState<number | null>(null);
-  
+function CgpaForm({ onCalculate, onReset, isLateralEntry, setIsLateralEntry } : { onCalculate: (data: CgpaFormValues) => void, onReset: () => void, isLateralEntry: boolean, setIsLateralEntry: (value: boolean) => void }) {
   const form = useForm<CgpaFormValues>({
     resolver: zodResolver(cgpaCalculationSchema),
     defaultValues: {
@@ -41,6 +39,101 @@ export function CgpaCalculator() {
     },
   });
 
+  useEffect(() => {
+    form.reset({
+      semesters: Array(8).fill({ sgpa: undefined, credits: undefined }),
+      isLateralEntry: isLateralEntry,
+    });
+  }, [isLateralEntry, form]);
+
+  const handleSwitchChange = (checked: boolean) => {
+    setIsLateralEntry(checked);
+    form.setValue('isLateralEntry', checked);
+    form.reset({
+        semesters: Array(8).fill({ sgpa: undefined, credits: undefined }),
+        isLateralEntry: checked,
+    });
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onCalculate)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="isLateralEntry"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base flex items-center gap-2">
+                    <Users />
+                    Lateral Entry Student?
+                  </FormLabel>
+                  <CardDescription>
+                    Enable this if you started from the 3rd semester.
+                  </CardDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={handleSwitchChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {form.getValues('semesters').map((_, index) => (
+              <div key={index} className={`space-y-3 p-3 rounded-md ${(isLateralEntry && index < 2) ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>
+                  <h4 className="font-medium text-center">Semester {index + 1}</h4>
+                  <FormField
+                      control={form.control}
+                      name={`semesters.${index}.sgpa`}
+                      render={({ field }) => (
+                      <FormItem>
+                          <FormLabel className="text-xs">SGPA</FormLabel>
+                          <FormControl>
+                          <Input type="number" step="0.01" {...field} value={field.value ?? ''} placeholder="0.00" disabled={isLateralEntry && index < 2} />
+                          </FormControl>
+                      </FormItem>
+                      )}
+                  />
+                  <FormField
+                      control={form.control}
+                      name={`semesters.${index}.credits`}
+                      render={({ field }) => (
+                      <FormItem>
+                          <FormLabel className="text-xs">Credits</FormLabel>
+                          <FormControl>
+                          <Input type="number" {...field} value={field.value ?? ''} placeholder="0" disabled={isLateralEntry && index < 2} />
+                          </FormControl>
+                      </FormItem>
+                      )}
+                  />
+              </div>
+          ))}
+          </div>
+          
+          <div className="flex justify-end gap-2">
+              <Button onClick={() => { onReset(); form.reset({ semesters: Array(8).fill({ sgpa: undefined, credits: undefined }), isLateralEntry: isLateralEntry }); }} variant="outline" type="button">
+                  <RotateCcw className='mr-2' />
+                  Reset
+              </Button>
+              <Button type="submit">
+                  <Calculator className="mr-2" /> Calculate CGPA
+              </Button>
+          </div>
+      </form>
+    </Form>
+  )
+}
+
+const DynamicCgpaForm = dynamic(() => Promise.resolve(CgpaForm), { ssr: false });
+
+export function CgpaCalculator() {
+  const [cgpa, setCgpa] = useState<number | null>(null);
+  const [isLateralEntry, setIsLateralEntry] = useState(false);
+  
   const onSubmit = (data: CgpaFormValues) => {
     let totalGradePoints = 0;
     let totalCredits = 0;
@@ -68,13 +161,7 @@ export function CgpaCalculator() {
   
   const handleReset = () => {
     setCgpa(null);
-    form.reset({
-      semesters: Array(8).fill({ sgpa: undefined, credits: undefined }),
-      isLateralEntry: form.getValues('isLateralEntry'),
-    });
   }
-
-  const isLateralEntry = form.watch('isLateralEntry');
 
   return (
     <Card className="w-full max-w-3xl mx-auto">
@@ -98,75 +185,12 @@ export function CgpaCalculator() {
                 </Button>
             </div>
         ) : (
-            <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="isLateralEntry"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base flex items-center gap-2">
-                          <Users />
-                          Lateral Entry Student?
-                        </FormLabel>
-                        <CardDescription>
-                          Enable this if you started from the 3rd semester.
-                        </CardDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {form.getValues('semesters').map((_, index) => (
-                    <div key={index} className={`space-y-3 p-3 rounded-md ${(isLateralEntry && index < 2) ? 'bg-gray-100 dark:bg-gray-800' : ''}`}>
-                        <h4 className="font-medium text-center">Semester {index + 1}</h4>
-                        <FormField
-                            control={form.control}
-                            name={`semesters.${index}.sgpa`}
-                            render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-xs">SGPA</FormLabel>
-                                <FormControl>
-                                <Input type="number" step="0.01" {...field} placeholder="0.00" disabled={isLateralEntry && index < 2} />
-                                </FormControl>
-                            </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name={`semesters.${index}.credits`}
-                            render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-xs">Credits</FormLabel>
-                                <FormControl>
-                                <Input type="number" {...field} placeholder="0" disabled={isLateralEntry && index < 2} />
-                                </FormControl>
-                            </FormItem>
-                            )}
-                        />
-                    </div>
-                ))}
-                </div>
-                
-                <div className="flex justify-end gap-2">
-                    <Button onClick={handleReset} variant="outline" type="button">
-                        <RotateCcw className='mr-2' />
-                        Reset
-                    </Button>
-                    <Button type="submit">
-                        <Calculator className="mr-2" /> Calculate CGPA
-                    </Button>
-                </div>
-            </form>
-            </Form>
+            <DynamicCgpaForm 
+              onCalculate={onSubmit}
+              onReset={handleReset}
+              isLateralEntry={isLateralEntry}
+              setIsLateralEntry={setIsLateralEntry}
+            />
         )}
       </CardContent>
     </Card>
