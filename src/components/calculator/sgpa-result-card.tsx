@@ -9,9 +9,10 @@ type SGPAResultCardProps = {
     sgpa: number;
     totalCredits: number;
     subjects: (SubjectDetails & { grade: string, grade_points: number, credits: number })[];
+    percentage: number;
 }
 
-export default function SGPAResultCard({ sgpa, totalCredits, subjects }: SGPAResultCardProps) {
+export default function SGPAResultCard({ sgpa, totalCredits, subjects, percentage }: SGPAResultCardProps) {
   const getSGPAGrade = (sgpa: number) => {
     if (sgpa >= 9.5) return { grade: "Outstanding", color: "bg-green-100 text-green-800", icon: Trophy };
     if (sgpa >= 8.5) return { grade: "Excellent", color: "bg-blue-100 text-blue-800", icon: Star };
@@ -23,8 +24,7 @@ export default function SGPAResultCard({ sgpa, totalCredits, subjects }: SGPARes
 
   const sgpaGrade = getSGPAGrade(sgpa);
   const SGPAIcon = sgpaGrade.icon;
-  const percentage = sgpa > 0 ? ((sgpa - 0.75) * 10).toFixed(2) : 0;
-
+  
   return (
     <div className="space-y-6">
       <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200 shadow-lg">
