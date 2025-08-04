@@ -28,6 +28,10 @@ export default function ExtractedDataPreview({ data, onConfirm, onEdit }: { data
               <p className="font-semibold text-gray-900 text-base">{data.studentDetails.usn || 'Not detected'}</p>
             </div>
             <div>
+              <p className="text-sm text-gray-600 mb-1">Semester</p>
+              <p className="font-semibold text-gray-900 text-base">{data.studentDetails.semester || 'Not detected'}</p>
+            </div>
+            <div>
               <p className="text-sm text-gray-600 mb-1">Branch</p>
               <p className="font-semibold text-gray-900 text-base">{data.studentDetails.branch || 'Not detected'}</p>
             </div>

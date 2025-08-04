@@ -28,6 +28,7 @@ const ExtractMarksheetDataOutputSchema = z.object({
     name: z.string().describe('The name of the student.'),
     usn: z.string().describe('The University Seat Number of the student.'),
     branch: z.string().describe('The branch of study of the student.'),
+    semester: z.string().describe('The semester of the student.'),
   }),
   subjectDetails: z.array(
     z.object({
@@ -52,7 +53,7 @@ const extractMarksheetDataPrompt = ai.definePrompt({
   prompt: `You are an AI assistant specialized in extracting data from marksheets.
   Given an image of a marksheet, extract the following information:
 
-  - Student Details: Name, USN, Branch
+  - Student Details: Name, USN, Branch, Semester
   - Subject Details: Subject Name, Subject Code, Internal Marks, External Marks, Total Marks
 
   Marksheet Image: {{media url=marksheetDataUri}}

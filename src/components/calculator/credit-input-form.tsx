@@ -146,6 +146,10 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
               <p className="font-semibold">{studentData.studentDetails.usn}</p>
             </div>
             <div>
+              <p className="text-gray-600 font-medium">Semester</p>
+              <p className="font-semibold">{studentData.studentDetails.semester}</p>
+            </div>
+            <div>
               <p className="text-gray-600 font-medium">Branch</p>
               <p className="font-semibold">{studentData.studentDetails.branch}</p>
             </div>

@@ -25,6 +25,7 @@ export default function ManualEntryForm({ onProceed }: ManualEntryFormProps) {
     name: "",
     usn: "",
     branch: "",
+    semester: "",
   });
   const [subjects, setSubjects] = useState([{ ...initialSubject }]);
   const [error, setError] = useState<string | null>(null);
@@ -103,6 +104,7 @@ export default function ManualEntryForm({ onProceed }: ManualEntryFormProps) {
         name: studentDetails.name.trim(),
         usn: studentDetails.usn.trim(),
         branch: studentDetails.branch.trim() || "Not specified",
+        semester: studentDetails.semester.trim() || "Not specified",
       },
       subjectDetails: subjects.map(subject => ({
         ...subject,
@@ -164,6 +166,16 @@ export default function ManualEntryForm({ onProceed }: ManualEntryFormProps) {
                   onChange={handleStudentDetailChange} 
                   placeholder="e.g., 1RV21CS001"
                   required 
+                />
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor="semester">Semester</Label>
+                <Input 
+                  id="semester" 
+                  name="semester" 
+                  value={studentDetails.semester} 
+                  onChange={handleStudentDetailChange} 
+                  placeholder="e.g., 3rd Semester"
                 />
               </div>
               <div className="space-y-2">

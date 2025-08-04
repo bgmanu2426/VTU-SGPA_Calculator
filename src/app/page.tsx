@@ -158,6 +158,7 @@ export default function UploadPage() {
   };
 
   const handleManualEntry = () => {
+    sessionStorage.removeItem('extractedData');
     router.push("/calculator");
   };
 

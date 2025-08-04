@@ -228,6 +228,11 @@ export default function CalculatorPage() {
     doc.text(format(new Date(), 'dd/MM/yyyy'), margin + 40, yPos + 26);
     
     doc.setFont(undefined, 'bold');
+    doc.text('Semester:', margin + 105, yPos + 10);
+    doc.setFont(undefined, 'normal');
+    doc.text(studentData.studentDetails.semester || 'Not specified', margin + 135, yPos + 10);
+    
+    doc.setFont(undefined, 'bold');
     doc.text('Branch:', margin + 105, yPos + 18);
     doc.setFont(undefined, 'normal');
     doc.text(getShortBranchName(studentData.studentDetails.branch) || 'Not specified', margin + 135, yPos + 18);
