@@ -27,14 +27,19 @@ export default function CalculatorPage() {
   const [mode, setMode] = useState('loading');
 
   useEffect(() => {
-    const data = sessionStorage.getItem('extractedData');
-    if (data) {
-      const parsedData = JSON.parse(data);
-      setStudentData(parsedData);
-      setSubjects(parsedData.subjectDetails || []);
-      setMode('calculate');
-    } else {
-      setMode('manual');
+    try {
+      const data = sessionStorage.getItem('extractedData');
+      if (data) {
+        const parsedData = JSON.parse(data);
+        setStudentData(parsedData);
+        setSubjects(parsedData.subjectDetails || []);
+        setMode('calculate');
+      } else {
+        setMode('manual');
+      }
+    } catch (error) {
+        console.error("Failed to parse sessionStorage data:", error);
+        setMode('manual');
     }
   }, []);
 
@@ -427,28 +432,9 @@ export default function CalculatorPage() {
   }
 
   if (!studentData) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 md:p-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <Card className="shadow-xl">
-            <CardContent className="p-8">
-              <CalculatorIcon className="w-16 h-16 mx-auto mb-4 text-blue-600" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">No Data Found</h2>
-              <p className="text-gray-600 mb-6">
-                Please upload a marksheet first to use the calculator.
-              </p>
-              <Button 
-                onClick={() => router.push("/")}
-                className="bg-blue-600 hover:bg-blue-700"
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                Upload Marksheet
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
+    // This case should ideally not be reached if mode logic is correct.
+    // But as a fallback, we can show the manual entry form.
+    return <ManualEntryForm onProceed={handleManualDataProceed} />;
   }
 
   return (
