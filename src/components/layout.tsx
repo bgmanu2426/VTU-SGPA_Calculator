@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calculator, Upload, GraduationCap } from "lucide-react";
+import { Calculator, Upload, GraduationCap, PenSquare, Medal } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +16,7 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from "@/components/ui/sidebar";
+import { SidebarProvider } from "./ui/sidebar";
 
 const navigationItems = [
   {
@@ -24,9 +25,19 @@ const navigationItems = [
     icon: Upload,
   },
   {
-    title: "Calculator",
+    title: "SGPA Calculator",
     url: "/calculator",
     icon: Calculator,
+  },
+  {
+    title: "Manual SGPA",
+    url: "/manual-calculator",
+    icon: PenSquare,
+  },
+  {
+    title: "CGPA Calculator",
+    url: "/cgpa-calculator",
+    icon: Medal,
   },
 ];
 
@@ -34,7 +45,7 @@ export function AppLayout({ children }: {children: React.ReactNode}) {
   const pathname = usePathname();
 
   return (
-    <>
+    <SidebarProvider>
         <style>
           {`
             :root {
@@ -155,6 +166,6 @@ export function AppLayout({ children }: {children: React.ReactNode}) {
                 </div>
             </main>
         </SidebarInset>
-    </>
+    </SidebarProvider>
   );
 }
