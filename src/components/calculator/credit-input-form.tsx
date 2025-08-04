@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calculator, User, BookOpen, RefreshCw, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { StudentDetails, SubjectDetails } from "@/types";
+import { fetchCredits } from "@/ai/flows/fetch-credits";
 
 type CreditInputFormProps = {
   subjects: SubjectDetails[];
@@ -33,27 +34,31 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
     setIsLoadingCredits(true);
     setCreditsError(null);
     
-    // Simplified credit fetching logic. In a real scenario, this would call an external API or a more complex Genkit flow.
     try {
-      const subjectCodes = subjects.map(s => s.subjectCode).filter(Boolean);
+      const subjectCodes = subjects.map(s => s.subjectCode).filter(Boolean) as string[];
       
       if (subjectCodes.length === 0) {
         throw new Error("No valid subject codes found to fetch credits.");
       }
 
-      // This is a mock implementation.
+      const result = await fetchCredits({ subjectCodes });
+      
       const newCredits : {[key: number]: number} = {};
       subjects.forEach((subject, index) => {
         const subjectCode = subject.subjectCode.toUpperCase();
-        let creditValue;
-        if (subjectCode && (subjectCode.toLowerCase().includes('lab') || subjectCode.includes('L') || subjectCode.endsWith('4') || subjectCode.endsWith('6') || subjectCode.endsWith('7') || subjectCode.endsWith('8'))) {
-          creditValue = 1;
-        } else if (subjectCode && subjectCode.toLowerCase().includes('project')) {
-          creditValue = 6;
-        } else if (subjectCode && (subjectCode.includes('MAT') || subjectCode.includes('MATH'))) {
-          creditValue = 4;
-        } else {
-          creditValue = 3;
+        let creditValue = result.credits[subjectCode];
+        
+        if (creditValue === undefined) {
+           // Fallback logic if AI doesn't return a value for a specific code
+           if (subjectCode && (subjectCode.toLowerCase().includes('lab') || subjectCode.includes('L') || subjectCode.endsWith('4') || subjectCode.endsWith('6') || subjectCode.endsWith('7') || subjectCode.endsWith('8'))) {
+            creditValue = 1;
+          } else if (subjectCode && subjectCode.toLowerCase().includes('project')) {
+            creditValue = 6;
+          } else if (subjectCode && (subjectCode.includes('MAT') || subjectCode.includes('MATH'))) {
+            creditValue = 4;
+          } else {
+            creditValue = 3;
+          }
         }
         newCredits[index] = creditValue;
       });
