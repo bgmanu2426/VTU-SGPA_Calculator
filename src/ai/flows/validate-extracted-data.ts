@@ -12,7 +12,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ValidateExtractedDataInputSchema = z.object({
-  studentName: z.string().describe('The name of the student.'),
+  name: z.string().describe('The name of the student.'),
   usn: z.string().describe('The University Seat Number of the student.'),
   branch: z.string().describe('The branch of the student.'),
   subjectDetails: z.array(
@@ -46,7 +46,7 @@ const validateExtractedDataPrompt = ai.definePrompt({
 
   Here is the extracted data:
 
-  Student Name: {{{studentName}}}
+  Student Name: {{{name}}}
   USN: {{{usn}}}
   Branch: {{{branch}}}
 
