@@ -167,7 +167,7 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
           <AlertCircle className="h-4 w-4 text-yellow-600" />
           <AlertDescription className="text-yellow-800 text-xs md:text-sm">
             <strong>Important:</strong> Credits are fetched automatically and sometimes may be incorrect. Please verify and edit if needed before calculating SGPA.
-          </Aler tDescription>
+          </Alert>
         </Alert>
       )}
 
