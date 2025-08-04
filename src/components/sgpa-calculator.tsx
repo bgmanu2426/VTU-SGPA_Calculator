@@ -3,32 +3,37 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { UploadForm } from '@/components/upload-form';
-import { ValidationForm } from '@/components/validation-form';
 import { ResultsDisplay } from '@/components/results-display';
 import type { ExtractMarksheetDataOutput } from '@/ai/flows/extract-marksheet-data';
-import type { ValidatedData, SgpaResults } from '@/types';
+import type { ValidatedData, SgpaResults, ValidatedSubject } from '@/types';
 import { calculateSgpa, calculatePercentage } from '@/lib/vtu';
 import { Skeleton } from './ui/skeleton';
 
-type Step = 'upload' | 'validation' | 'results';
+type Step = 'upload' | 'results';
 
 export function SgpaCalculator() {
   const [step, setStep] = useState<Step>('upload');
   const [isLoading, setIsLoading] = useState(false);
-  const [extractedData, setExtractedData] = useState<ExtractMarksheetDataOutput | null>(null);
   const [validatedData, setValidatedData] = useState<ValidatedData | null>(null);
   const [results, setResults] = useState<SgpaResults | null>(null);
 
   const handleDataExtracted = (data: ExtractMarksheetDataOutput) => {
-    setExtractedData(data);
-    setStep('validation');
-    setIsLoading(false);
-  };
+    // We are skipping the validation step
+    // We need to add default credits to the subjects
+    const subjectsWithCredits: ValidatedSubject[] = data.subjectDetails.map(s => ({
+        ...s,
+        credits: 4 // Defaulting credits to 4, user should verify this in a later step if needed
+    }));
 
-  const handleValidationComplete = (data: ValidatedData) => {
-    const sgpa = calculateSgpa(data.subjectDetails);
-    const percentage = calculatePercentage(data.subjectDetails);
-    setValidatedData(data);
+    const completeData: ValidatedData = {
+        studentDetails: data.studentDetails,
+        subjectDetails: subjectsWithCredits
+    }
+
+    const sgpa = calculateSgpa(completeData.subjectDetails);
+    const percentage = calculatePercentage(completeData.subjectDetails);
+    
+    setValidatedData(completeData);
     setResults({ sgpa, percentage });
     setStep('results');
     setIsLoading(false);
@@ -36,32 +41,19 @@ export function SgpaCalculator() {
 
   const handleReset = () => {
     setStep('upload');
-    setExtractedData(null);
     setValidatedData(null);
     setResults(null);
     setIsLoading(false);
   };
 
   const renderStep = () => {
-    if (isLoading && (step === 'upload' || step === 'validation')) {
+    if (isLoading && step === 'upload') {
         return <LoadingSkeleton currentStep={step} />;
     }
 
     switch (step) {
       case 'upload':
         return <UploadForm onDataExtracted={handleDataExtracted} setIsLoading={setIsLoading} isLoading={isLoading} />;
-      case 'validation':
-        if (extractedData) {
-          return (
-            <ValidationForm
-              initialData={extractedData}
-              onValidationComplete={handleValidationComplete}
-              setIsLoading={setIsLoading}
-              isLoading={isLoading}
-            />
-          );
-        }
-        return <LoadingSkeleton currentStep="validation" message="Error loading validation form. Please reset." />;
       case 'results':
         if (results && validatedData) {
           return <ResultsDisplay results={results} data={validatedData} onReset={handleReset} />;
@@ -92,7 +84,6 @@ export function SgpaCalculator() {
 const Stepper = ({ currentStep }: { currentStep: Step }) => {
     const steps = [
         { id: 'upload', name: 'Upload' },
-        { id: 'validation', name: 'Process' },
         { id: 'results', name: 'Review' },
     ];
     const currentStepIndex = steps.findIndex(s => s.id === currentStep);

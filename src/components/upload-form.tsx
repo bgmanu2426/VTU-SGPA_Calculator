@@ -8,6 +8,11 @@ import { extractMarksheetData } from '@/ai/flows/extract-marksheet-data';
 import type { ExtractMarksheetDataOutput } from '@/ai/flows/extract-marksheet-data';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import * as pdfjs from 'pdfjs-dist';
+
+// Set worker source
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
 
 interface UploadFormProps {
   onDataExtracted: (data: ExtractMarksheetDataOutput) => void;
@@ -47,15 +52,59 @@ export function UploadForm({ onDataExtracted, setIsLoading, isLoading }: UploadF
   const [preview, setPreview] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const convertPdfToImage = async (file: File): Promise<string> => {
+    const fileReader = new FileReader();
+    return new Promise((resolve, reject) => {
+        fileReader.onload = async (e) => {
+            if (!e.target?.result) return reject(new Error("Failed to read file"));
+            const typedarray = new Uint8Array(e.target.result as ArrayBuffer);
+            const pdf = await pdfjs.getDocument(typedarray).promise;
+            const page = await pdf.getPage(1); // Use the first page
+            
+            const viewport = page.getViewport({ scale: 2.0 }); // Increase scale for better resolution
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            if (!context) return reject(new Error("Could not get canvas context"));
+
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+            resolve(canvas.toDataURL('image/png'));
+        };
+        fileReader.onerror = reject;
+        fileReader.readAsArrayBuffer(file);
+    });
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(selectedFile);
+      
+      setIsLoading(true);
+      try {
+        if (selectedFile.type === 'application/pdf') {
+            const imageDataUrl = await convertPdfToImage(selectedFile);
+            setPreview(imageDataUrl);
+        } else {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreview(reader.result as string);
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+      } catch (error) {
+        console.error("Error processing file:", error);
+        toast({
+            variant: 'destructive',
+            title: 'File Processing Failed',
+            description: 'Could not process the uploaded file. Please try again with a different file.',
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -132,7 +181,7 @@ export function UploadForm({ onDataExtracted, setIsLoading, isLoading }: UploadF
                 <Loader2 className="animate-spin" />
             ) : (
                 <>
-                Choose File
+                Process Marksheet
                 </>
             )}
             </Button>
@@ -145,7 +194,7 @@ export function UploadForm({ onDataExtracted, setIsLoading, isLoading }: UploadF
                 <li>PDF files are automatically converted to high-quality images for better text extraction accuracy.</li>
                 <li>PDF pages converted to 2x resolution images.</li>
                 <li>Enhanced OCR accuracy for marksheet data.</li>
-                <li>Support for multi-page PDFs.</li>
+                <li>Support for multi-page PDFs (first page is used).</li>
             </AlertDescription>
         </Alert>
     </div>
