@@ -9,10 +9,9 @@ type SGPAResultCardProps = {
     sgpa: number;
     totalCredits: number;
     subjects: (SubjectDetails & { grade: string, grade_points: number, credits: number })[];
-    percentage: number;
 }
 
-export default function SGPAResultCard({ sgpa, totalCredits, subjects, percentage }: SGPAResultCardProps) {
+export default function SGPAResultCard({ sgpa, totalCredits, subjects }: SGPAResultCardProps) {
   const getSGPAGrade = (sgpa: number) => {
     if (sgpa >= 9.5) return { grade: "Outstanding", color: "bg-green-100 text-green-800", icon: Trophy };
     if (sgpa >= 8.5) return { grade: "Excellent", color: "bg-blue-100 text-blue-800", icon: Star };
@@ -45,16 +44,10 @@ export default function SGPAResultCard({ sgpa, totalCredits, subjects, percentag
               </Badge>
             </div>
             
-            <div className="grid grid-cols-2 gap-4 mt-6">
+            <div className="grid grid-cols-1 gap-4 mt-6">
               <div className="text-center p-3 rounded-lg bg-white/50">
                 <p className="text-sm text-gray-600">Total Credits</p>
                 <p className="text-2xl font-bold text-gray-900">{totalCredits}</p>
-              </div>
-              <div className="text-center p-3 rounded-lg bg-white/50">
-                <p className="text-sm text-gray-600">Percentage</p>
-                <p className="text-2xl font-bold text-gray-900 flex items-center justify-center gap-1">
-                  {percentage}<Percent className="w-5 h-5" />
-                </p>
               </div>
             </div>
           </div>

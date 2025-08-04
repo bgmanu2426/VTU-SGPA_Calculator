@@ -16,7 +16,6 @@ type SgpaResult = {
   sgpa: number;
   totalCredits: number;
   subjects: (SubjectDetails & {grade: string, grade_points: number, credits: number})[];
-  percentage: number;
 }
 
 export default function CalculatorPage() {
@@ -83,13 +82,11 @@ export default function CalculatorPage() {
     });
 
     const sgpa = totalCredits > 0 ? totalGradePoints / totalCredits : 0;
-    const percentage = maxTotalMarks > 0 ? (totalMarksObtained / maxTotalMarks) * 100 : 0;
     
     return {
       sgpa: Math.round(sgpa * 100) / 100,
       totalCredits,
       subjects: processedSubjects,
-      percentage: Math.round(percentage * 100) / 100
     };
   };
 
@@ -465,7 +462,6 @@ export default function CalculatorPage() {
                   sgpa={sgpaResult.sgpa}
                   totalCredits={sgpaResult.totalCredits}
                   subjects={sgpaResult.subjects}
-                  percentage={sgpaResult.percentage}
                 />
                 
                 <div className="text-center">
