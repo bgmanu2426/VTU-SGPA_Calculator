@@ -20,7 +20,6 @@ import dynamic from 'next/dynamic';
 
 const semesterSchema = z.object({
   sgpa: z.coerce.number().min(0, 'SGPA must be positive').max(10, "SGPA can't exceed 10").optional(),
-  credits: z.coerce.number().min(0, 'Credits must be positive').max(40, "Credits can't exceed 40").optional(),
 });
 
 const cgpaCalculationSchema = z.object({
@@ -34,14 +33,14 @@ function CgpaForm({ onCalculate, onReset, isLateralEntry, setIsLateralEntry } : 
   const form = useForm<CgpaFormValues>({
     resolver: zodResolver(cgpaCalculationSchema),
     defaultValues: {
-      semesters: Array(8).fill({ sgpa: undefined, credits: undefined }),
+      semesters: Array(8).fill({ sgpa: undefined }),
       isLateralEntry: false,
     },
   });
 
   useEffect(() => {
     form.reset({
-      semesters: Array(8).fill({ sgpa: undefined, credits: undefined }),
+      semesters: Array(8).fill({ sgpa: undefined }),
       isLateralEntry: isLateralEntry,
     });
   }, [isLateralEntry, form]);
@@ -50,7 +49,7 @@ function CgpaForm({ onCalculate, onReset, isLateralEntry, setIsLateralEntry } : 
     setIsLateralEntry(checked);
     form.setValue('isLateralEntry', checked);
     form.reset({
-        semesters: Array(8).fill({ sgpa: undefined, credits: undefined }),
+        semesters: Array(8).fill({ sgpa: undefined }),
         isLateralEntry: checked,
     });
   }
@@ -98,24 +97,12 @@ function CgpaForm({ onCalculate, onReset, isLateralEntry, setIsLateralEntry } : 
                       </FormItem>
                       )}
                   />
-                  <FormField
-                      control={form.control}
-                      name={`semesters.${index}.credits`}
-                      render={({ field }) => (
-                      <FormItem>
-                          <FormLabel className="text-xs">Credits</FormLabel>
-                          <FormControl>
-                          <Input type="number" {...field} value={field.value ?? ''} placeholder="0" disabled={isLateralEntry && index < 2} />
-                          </FormControl>
-                      </FormItem>
-                      )}
-                  />
               </div>
           ))}
           </div>
           
           <div className="flex justify-end gap-2">
-              <Button onClick={() => { onReset(); form.reset({ semesters: Array(8).fill({ sgpa: undefined, credits: undefined }), isLateralEntry: isLateralEntry }); }} variant="outline" type="button">
+              <Button onClick={() => { onReset(); form.reset({ semesters: Array(8).fill({ sgpa: undefined }), isLateralEntry: isLateralEntry }); }} variant="outline" type="button">
                   <RotateCcw className='mr-2' />
                   Reset
               </Button>
@@ -135,27 +122,20 @@ export function CgpaCalculator() {
   const [isLateralEntry, setIsLateralEntry] = useState(false);
   
   const onSubmit = (data: CgpaFormValues) => {
-    let totalGradePoints = 0;
-    let totalCredits = 0;
-    
     const startSemester = data.isLateralEntry ? 2 : 0;
+    
+    const validSgpas = data.semesters
+        .slice(startSemester)
+        .map(s => s.sgpa)
+        .filter(sgpa => sgpa !== undefined && sgpa > 0) as number[];
 
-    data.semesters.slice(startSemester).forEach(s => {
-        const sgpa = s.sgpa || 0;
-        const credits = s.credits || 0;
-
-        if (sgpa > 0 && credits > 0) {
-            totalGradePoints += sgpa * credits;
-            totalCredits += credits;
-        }
-    });
-
-    if (totalCredits === 0) {
+    if (validSgpas.length === 0) {
         setCgpa(0);
         return;
     }
 
-    const calculatedCgpa = totalGradePoints / totalCredits;
+    const totalSgpa = validSgpas.reduce((sum, sgpa) => sum + sgpa, 0);
+    const calculatedCgpa = totalSgpa / validSgpas.length;
     setCgpa(parseFloat(calculatedCgpa.toFixed(2)));
   };
   
@@ -171,7 +151,7 @@ export function CgpaCalculator() {
             CGPA Calculator
         </CardTitle>
         <CardDescription>
-          Enter your SGPA and total credits for each semester to calculate your CGPA.
+          Enter your SGPA for each semester to calculate your CGPA.
         </CardDescription>
       </CardHeader>
       <CardContent>
