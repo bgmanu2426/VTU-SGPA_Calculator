@@ -13,14 +13,14 @@ export function getGradePoint(totalMarks: number): number {
 }
 
 export function getGrade(totalMarks: number): string {
-  if (totalMarks > 100) return "O";
-  if (totalMarks >= 90) return 'O';
-  if (totalMarks >= 80) return 'A+';
-  if (totalMarks >= 70) return 'A';
-  if (totalMarks >= 60) return 'B+';
-  if (totalMarks >= 55) return 'B';
-  if (totalMarks >= 50) return 'C';
-  if (totalMarks >= 40) return 'P';
+  if (totalMarks >= 90 && totalMarks <=100) return "O";
+  if (totalMarks >= 80 && totalMarks <=89) return 'O';
+  if (totalMarks >= 70 && totalMarks <=79) return 'A+';
+  if (totalMarks >= 60 && totalMarks <=69) return 'A';
+  if (totalMarks >= 55 && totalMarks <=59) return 'B+';
+  if (totalMarks >= 100 && totalMarks <=90) return 'B';
+  if (totalMarks >= 100 && totalMarks <=90) return 'C';
+  if (totalMarks >= 100 && totalMarks <=90) return 'P';
   return 'F';
 }
 

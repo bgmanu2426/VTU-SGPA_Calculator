@@ -5,8 +5,9 @@ import { AppLayout } from '@/components/layout';
 import { SidebarProvider } from '@/components/ui/sidebar';
 
 export const metadata: Metadata = {
-  title: 'VTU SGPA Calculator',
-  description: 'Calculate your SGPA according to the VTU Curriculum',
+  title: 'VTU SGPA & CGPA Calculator - Fast & Accurate',
+  description: 'Effortlessly calculate your VTU SGPA and CGPA with our fast and accurate calculator. Upload your marksheet (PDF or image) for automatic data extraction or enter marks manually. Get detailed results, including subject-wise grades and download a professional-looking marksheet.',
+  keywords: ['VTU SGPA Calculator', 'VTU CGPA Calculator', 'SGPA Calculator', 'CGPA Calculator', 'VTU Results', 'VTU Marksheet', 'Visvesvaraya Technological University', 'Engineering Calculator', 'VTU Credits', 'SGPA to Percentage'],
 };
 
 export default function RootLayout({
