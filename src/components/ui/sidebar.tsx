@@ -207,10 +207,10 @@ const Sidebar = React.forwardRef<
             side={side}
           >
             <SheetHeader className="p-4 border-b">
-                <SheetTitle className="text-lg font-semibold text-foreground text-left">Menu</SheetTitle>
-                <SheetDescription className="text-sm text-muted-foreground text-left">
-                  Navigate through the application.
-                </SheetDescription>
+              <SheetTitle>VTU SGPA</SheetTitle>
+              <SheetDescription>
+                Calculator & Analyzer
+              </SheetDescription>
             </SheetHeader>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>

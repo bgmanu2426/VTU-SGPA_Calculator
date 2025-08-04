@@ -138,7 +138,7 @@ export function UploadForm({ onDataExtracted, setIsLoading, isLoading }: UploadF
         <div className="text-center">
             <h1 className="text-3xl font-bold tracking-tight font-headline">Upload Your Marksheet</h1>
             <p className="text-muted-foreground max-w-2xl mx-auto mt-2">
-              Upload your VTU marksheet (PDF or Image). PDFs will be automatically converted to images for better analysis.
+              Upload your VTU marksheet (PDF or Image).
             </p>
         </div>
         <div className="flex justify-center">

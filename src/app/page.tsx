@@ -92,7 +92,7 @@ export default function UploadPage() {
     setExtractionAttempts(prev => prev + 1);
 
     try {
-      setProcessingStep("Analyzing marksheet content...");
+      setProcessingStep("This may take 30-60 Seconds");
       const result = await extractMarksheetData({ marksheetDataUri: preview });
 
       if (result) {
@@ -170,7 +170,7 @@ export default function UploadPage() {
             Upload Your Marksheet
           </h1>
           <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-            Upload your VTU marksheet (PDF or Image). PDFs will be automatically converted to images for better analysis.
+            Upload your VTU marksheet (PDF or Image).
           </p>
         </div>
 
@@ -283,7 +283,7 @@ export default function UploadPage() {
                   {isProcessing ? (
                     <>
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                      Processing... (This may take 30-60 seconds)
+                      Processing...
                     </>
                   ) : (
                     <>

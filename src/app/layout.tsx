@@ -5,8 +5,8 @@ import { AppLayout } from '@/components/layout';
 import { SidebarProvider } from '@/components/ui/sidebar';
 
 export const metadata: Metadata = {
-  title: 'SGPA Assistant',
-  description: 'Calculate your VTU SGPA from your marksheet',
+  title: 'VTU SGPA Calculator',
+  description: 'Calculate your SGPA according to the VTU Curriculum',
 };
 
 export default function RootLayout({

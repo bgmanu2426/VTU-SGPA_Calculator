@@ -116,7 +116,7 @@ const LoadingSkeleton = ({ currentStep = 'upload', message = 'Processing your ma
         <div className="space-y-4 text-center">
             <h1 className="text-3xl font-bold tracking-tight font-headline">Upload Your Marksheet</h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Upload your VTU marksheet (PDF or Image). PDFs will be automatically converted to images for better analysis.
+              Upload your VTU marksheet (PDF or Image).
             </p>
             <div className="flex justify-center py-4">
                 <Stepper currentStep={currentStep} />
