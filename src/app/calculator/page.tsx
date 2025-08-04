@@ -53,13 +53,13 @@ export default function CalculatorPage() {
   }, []);
 
   const calculateGrade = (totalMarks: number) => {
-    if (totalMarks >= 90) return { grade: 'O', points: 10 };
-    if (totalMarks >= 80) return { grade: 'A+', points: 9 };
-    if (totalMarks >= 70) return { grade: 'A', points: 8 };
-    if (totalMarks >= 60) return { grade: 'B+', points: 7 };
-    if (totalMarks >= 55) return { grade: 'B', points: 6 };
-    if (totalMarks >= 50) return { grade: 'C', points: 5 };
-    if (totalMarks >= 40) return { grade: 'P', points: 4 };
+    if (totalMarks >= 90 && totalMarks <=100) return { grade: 'O', points: 10 };
+    if (totalMarks >= 80 && totalMarks <=89) return { grade: 'A+', points: 9 };
+    if (totalMarks >= 70 && totalMarks <=79) return { grade: 'A', points: 8 };
+    if (totalMarks >= 60 && totalMarks <=69) return { grade: 'B+', points: 7 };
+    if (totalMarks >= 55 && totalMarks <=59) return { grade: 'B', points: 6 };
+    if (totalMarks >= 50 && totalMarks <=54) return { grade: 'C', points: 5 };
+    if (totalMarks >= 40 && totalMarks <=49) return { grade: 'P', points: 4 };
     return { grade: 'F', points: 0 };
   };
 

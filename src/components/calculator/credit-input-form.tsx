@@ -111,24 +111,24 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
   };
 
   const getGradeColor = (totalMarks: number) => {
-    if (totalMarks >= 90) return "bg-green-100 text-green-800";
-    if (totalMarks >= 80) return "bg-blue-100 text-blue-800";
-    if (totalMarks >= 70) return "bg-indigo-100 text-indigo-800";
-    if (totalMarks >= 60) return "bg-purple-100 text-purple-800";
-    if (totalMarks >= 55) return "bg-yellow-100 text-yellow-800";
-    if (totalMarks >= 50) return "bg-orange-100 text-orange-800";
-    if (totalMarks >= 40) return "bg-gray-100 text-gray-800";
+    if (totalMarks >= 90 && totalMarks <=100) return "bg-green-100 text-green-800";
+    if (totalMarks >= 80 && totalMarks <=89) return "bg-blue-100 text-blue-800";
+    if (totalMarks >= 70 && totalMarks <=79) return "bg-indigo-100 text-indigo-800";
+    if (totalMarks >= 60 && totalMarks <=69) return "bg-purple-100 text-purple-800";
+    if (totalMarks >= 55 && totalMarks <=59) return "bg-yellow-100 text-yellow-800";
+    if (totalMarks >= 50 && totalMarks <=54) return "bg-orange-100 text-orange-800";
+    if (totalMarks >= 40 && totalMarks <=49) return "bg-gray-100 text-gray-800";
     return "bg-red-100 text-red-800";
   };
 
   const getGradeLetter = (totalMarks: number) => {
-    if (totalMarks >= 90) return "O";
-    if (totalMarks >= 80) return "A+";
-    if (totalMarks >= 70) return "A";
-    if (totalMarks >= 60) return "B+";
-    if (totalMarks >= 55) return "B";
-    if (totalMarks >= 50) return "C";
-    if (totalMarks >= 40) return "P";
+    if (totalMarks >= 90 && totalMarks <=100) return "O";
+    if (totalMarks >= 80 && totalMarks <=89) return "A+";
+    if (totalMarks >= 70 && totalMarks <=79) return "A";
+    if (totalMarks >= 60 && totalMarks <=69) return "B+";
+    if (totalMarks >= 55 && totalMarks <=59) return "B";
+    if (totalMarks >= 50 && totalMarks <=54) return "C";
+    if (totalMarks >= 40 && totalMarks <=49) return "P";
     return "F";
   };
 

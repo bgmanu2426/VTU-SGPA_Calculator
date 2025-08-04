@@ -264,7 +264,7 @@ export default function UploadPage() {
                   File size: {(file.size / 1024 / 1024).toFixed(2)} MB
                 </p>
                 <p className="text-sm text-gray-500 mb-4">
-                  File type: {file.type === 'application/pdf' ? 'PDF Document (will be converted)' : 'Image'}
+                  File type: {file.type === 'application/pdf' ? 'PDF' : 'Image'}
                 </p>
                 {processingStep && (
                   <div className="flex items-center justify-center gap-2 text-blue-600">

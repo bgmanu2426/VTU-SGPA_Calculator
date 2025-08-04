@@ -1,27 +1,27 @@
 import type { ValidatedSubject } from '@/types';
 
 export function getGradePoint(totalMarks: number): number {
-  if (totalMarks > 100) return 10;
-  if (totalMarks >= 90) return 10;
-  if (totalMarks >= 80) return 9;
-  if (totalMarks >= 70) return 8;
-  if (totalMarks >= 60) return 7;
-  if (totalMarks >= 55) return 6;
-  if (totalMarks >= 50) return 5;
-  if (totalMarks >= 40) return 4;
+  if (totalMarks >= 90 && totalMarks <=100) return 10;
+  if (totalMarks >= 80 && totalMarks <=89) return 9;
+  if (totalMarks >= 70 && totalMarks <=79) return 8;
+  if (totalMarks >= 60 && totalMarks <=69) return 7;
+  if (totalMarks >= 55 && totalMarks <=59) return 6;
+  if (totalMarks >= 50 && totalMarks <=54) return 5;
+  if (totalMarks >= 40 && totalMarks <=49) return 4;
+  if (totalMarks >= 0 && totalMarks <=39) return 0;
   return 0;
 }
 
 export function getGrade(totalMarks: number): string {
   if (totalMarks >= 90 && totalMarks <=100) return "O";
-  if (totalMarks >= 80 && totalMarks <=89) return 'O';
-  if (totalMarks >= 70 && totalMarks <=79) return 'A+';
-  if (totalMarks >= 60 && totalMarks <=69) return 'A';
-  if (totalMarks >= 55 && totalMarks <=59) return 'B+';
-  if (totalMarks >= 100 && totalMarks <=90) return 'B';
-  if (totalMarks >= 100 && totalMarks <=90) return 'C';
-  if (totalMarks >= 100 && totalMarks <=90) return 'P';
-  return 'F';
+  if (totalMarks >= 80 && totalMarks <=89) return 'A+';
+  if (totalMarks >= 70 && totalMarks <=79) return 'A';
+  if (totalMarks >= 60 && totalMarks <=69) return 'B+';
+  if (totalMarks >= 55 && totalMarks <=59) return 'B';
+  if (totalMarks >= 50 && totalMarks <=54) return 'C';
+  if (totalMarks >= 40 && totalMarks <=49) return 'P';
+  if (totalMarks >= 0 && totalMarks <=39) return 'F';
+  return 'Invalid';
 }
 
 export function calculateSgpa(subjects: ValidatedSubject[]): number {

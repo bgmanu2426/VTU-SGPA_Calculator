@@ -50,7 +50,7 @@ const extractMarksheetDataPrompt = ai.definePrompt({
   name: 'extractMarksheetDataPrompt',
   input: {schema: ExtractMarksheetDataInputSchema},
   output: {schema: ExtractMarksheetDataOutputSchema},
-  prompt: `You are an AI assistant specialized in extracting data from marksheets.
+  prompt: `You are an AI assistant specialized in extracting data from Visvesvaraya Technological University (VTU) marksheets.
   Given an image of a marksheet, extract the following information:
 
   - Student Details: Name, USN, Branch, Semester
@@ -58,9 +58,15 @@ const extractMarksheetDataPrompt = ai.definePrompt({
 
   Marksheet Image: {{media url=marksheetDataUri}}
 
-  Ensure that all extracted data is accurate and properly formatted.
-  Return the data in JSON format.
-  Follow this schema: ${JSON.stringify(ExtractMarksheetDataOutputSchema.shape, null, 2)}
+  **Important Instructions:**
+  1.  **Branch Identification:** If the branch is not explicitly written on the marksheet, you MUST identify it from the student's USN (University Seat Number) or the subject codes.
+      *   **From USN:** The 6th and 7th characters of a VTU USN typically represent the branch code (e.g., in '1RV21CS001', 'CS' stands for Computer Science).
+      *   **From Subject Codes:** Subject codes also contain branch identifiers (e.g., '18CS32' is a Computer Science subject).
+      *   Use this information to fill in the 'branch' field accurately.
+
+  2.  **Accuracy:** Ensure that all extracted data is accurate and properly formatted.
+  3.  **JSON Output:** Return the data in a valid JSON format that strictly follows this schema:
+      ${JSON.stringify(ExtractMarksheetDataOutputSchema.shape, null, 2)}
   `,
 });
 

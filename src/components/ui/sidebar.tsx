@@ -206,11 +206,9 @@ const Sidebar = React.forwardRef<
             }
             side={side}
           >
-            <SheetHeader className="p-4 border-b">
-              <SheetTitle>VTU SGPA</SheetTitle>
-              <SheetDescription>
-                Calculator & Analyzer
-              </SheetDescription>
+            <SheetHeader>
+              <SheetTitle></SheetTitle>
+              <SheetDescription></SheetDescription>
             </SheetHeader>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
