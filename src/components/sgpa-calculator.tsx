@@ -43,8 +43,8 @@ export function SgpaCalculator() {
   };
 
   const renderStep = () => {
-    if (isLoading && step === 'upload') {
-        return <LoadingSkeleton />;
+    if (isLoading && (step === 'upload' || step === 'validation')) {
+        return <LoadingSkeleton currentStep={step} />;
     }
 
     switch (step) {
@@ -61,12 +61,12 @@ export function SgpaCalculator() {
             />
           );
         }
-        return <LoadingSkeleton message="Error loading validation form. Please reset." />;
+        return <LoadingSkeleton currentStep="validation" message="Error loading validation form. Please reset." />;
       case 'results':
         if (results && validatedData) {
           return <ResultsDisplay results={results} data={validatedData} onReset={handleReset} />;
         }
-        return <LoadingSkeleton message="Error loading results. Please reset." />;
+        return <LoadingSkeleton currentStep="results" message="Error loading results. Please reset." />;
       default:
         return <LoadingSkeleton message="An unexpected error occurred. Please reset."/>;
     }
@@ -89,10 +89,48 @@ export function SgpaCalculator() {
   );
 }
 
-const LoadingSkeleton = ({ message = 'Processing your marksheet...' }: { message?: string }) => (
-    <div className="w-full max-w-2xl mx-auto space-y-6">
-        <div className="space-y-2 text-center">
-            <h2 className="text-2xl font-bold font-headline">{message}</h2>
+const Stepper = ({ currentStep }: { currentStep: Step }) => {
+    const steps = [
+        { id: 'upload', name: 'Upload' },
+        { id: 'validation', name: 'Process' },
+        { id: 'results', name: 'Review' },
+    ];
+    const currentStepIndex = steps.findIndex(s => s.id === currentStep);
+
+    return (
+        <nav aria-label="Progress">
+        <ol role="list" className="flex items-center justify-center space-x-8 sm:space-x-16">
+            {steps.map((step, index) => (
+            <li key={step.name} className="flex items-center">
+                {index <= currentStepIndex ? (
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground">
+                    <span className="text-sm font-medium">{index + 1}</span>
+                </div>
+                ) : (
+                <div className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-primary text-primary">
+                    <span className="text-sm font-medium">{index + 1}</span>
+                </div>
+                )}
+                <span className="ml-4 text-sm font-medium hidden sm:block">{step.name}</span>
+            </li>
+            ))}
+        </ol>
+        </nav>
+    );
+};
+
+
+const LoadingSkeleton = ({ currentStep = 'upload', message = 'Processing your marksheet...' }: { currentStep?: Step; message?: string }) => (
+    <div className="w-full max-w-3xl mx-auto space-y-6">
+        <div className="space-y-4 text-center">
+            <h1 className="text-3xl font-bold tracking-tight font-headline">Upload Your Marksheet</h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Upload your VTU marksheet (PDF or Image). PDFs will be automatically converted to images for better analysis.
+            </p>
+            <div className="flex justify-center py-4">
+                <Stepper currentStep={currentStep} />
+            </div>
+            <h2 className="text-2xl font-bold font-headline pt-4">{message}</h2>
             <p className="text-muted-foreground">This may take a moment.</p>
         </div>
         <div className="p-4 border rounded-lg space-y-4">

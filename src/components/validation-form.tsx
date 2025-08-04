@@ -22,12 +22,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ClipboardCheck, Loader2 } from 'lucide-react';
+import { Loader2, Calculator } from 'lucide-react';
 import type { StudentDetails, SubjectDetails, ValidatedData } from '@/types';
-import { validateExtractedData } from '@/ai/flows/validate-extracted-data';
 import { useEffect, useState } from 'react';
-import { Skeleton } from './ui/skeleton';
 
 const subjectSchema = z.object({
   subjectName: z.string().min(1, 'Subject name is required.'),
@@ -60,8 +57,6 @@ export function ValidationForm({
   setIsLoading,
   isLoading,
 }: ValidationFormProps) {
-  const [reviewPrompt, setReviewPrompt] = useState('');
-  const [isPromptLoading, setIsPromptLoading] = useState(true);
 
   const form = useForm<z.infer<typeof validationSchema>>({
     resolver: zodResolver(validationSchema),
@@ -76,24 +71,6 @@ export function ValidationForm({
     name: 'subjectDetails',
   });
 
-  useEffect(() => {
-    async function getReviewPrompt() {
-      try {
-        const { reviewPrompt } = await validateExtractedData({
-          ...initialData.studentDetails,
-          subjectDetails: initialData.subjectDetails,
-        });
-        setReviewPrompt(reviewPrompt);
-      } catch (error) {
-        console.error('Failed to get review prompt', error);
-        setReviewPrompt('Please carefully review the extracted data and correct any mistakes.');
-      } finally {
-        setIsPromptLoading(false);
-      }
-    }
-    getReviewPrompt();
-  }, [initialData]);
-
   const onSubmit = (data: z.infer<typeof validationSchema>) => {
     setIsLoading(true);
     onValidationComplete(data);
@@ -104,22 +81,10 @@ export function ValidationForm({
       <CardHeader>
         <CardTitle className="font-headline text-2xl">Verify Extracted Data</CardTitle>
         <CardDescription>
-          Please check the data extracted by the AI. Make any necessary corrections before calculating the SGPA.
+          Please check the data extracted by the AI. Make any necessary corrections, especially the credits for each subject, before calculating the SGPA.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {isPromptLoading ? (
-          <div className="space-y-2 mb-4">
-            <Skeleton className="h-4 w-1/4" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
-          </div>
-        ) : (
-          <Alert className="mb-6 bg-primary/10">
-            <AlertTitle>AI Review</AlertTitle>
-            <AlertDescription>{reviewPrompt}</AlertDescription>
-          </Alert>
-        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-4">
@@ -169,7 +134,7 @@ export function ValidationForm({
 
             <div className="space-y-4">
                <h3 className="text-lg font-medium font-headline">Subject Details</h3>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto border rounded-lg">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -238,7 +203,7 @@ export function ValidationForm({
                 <Loader2 className="animate-spin" />
               ) : (
                 <>
-                  <ClipboardCheck className="mr-2" /> Verify & Calculate SGPA
+                  <Calculator className="mr-2" /> Calculate SGPA
                 </>
               )}
             </Button>
