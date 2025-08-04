@@ -17,7 +17,7 @@ type CreditInputFormProps = {
 }
 
 export default function CreditInputForm({ subjects, onCalculate, studentData }: CreditInputFormProps) {
-  const [credits, setCredits] = useState<{[key: number]: number}>({});
+  const [credits, setCredits] = useState<{[key: string]: number}>({});
   const [isLoadingCredits, setIsLoadingCredits] = useState(false);
   const [creditsFetched, setCreditsFetched] = useState(false);
   const [creditsError, setCreditsError] = useState<string | null>(null);
@@ -44,13 +44,12 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
       const result = await fetchCredits({ subjectCodes });
       const creditsMap = new Map(result.credits.map(c => [c.subjectCode.toUpperCase(), c.credit]));
       
-      const newCredits : {[key: number]: number} = {};
-      subjects.forEach((subject, index) => {
+      const newCredits : {[key: string]: number} = {};
+      subjects.forEach((subject) => {
         const subjectCode = subject.subjectCode.toUpperCase();
         let creditValue = creditsMap.get(subjectCode);
         
         if (creditValue === undefined) {
-           // Fallback logic if AI doesn't return a value for a specific code
            if (subjectCode && (subjectCode.toLowerCase().includes('lab') || subjectCode.includes('L') || subjectCode.endsWith('4') || subjectCode.endsWith('6') || subjectCode.endsWith('7') || subjectCode.endsWith('8'))) {
             creditValue = 1;
           } else if (subjectCode && subjectCode.toLowerCase().includes('project')) {
@@ -61,7 +60,7 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
             creditValue = 3;
           }
         }
-        newCredits[index] = creditValue;
+        newCredits[subject.subjectCode] = creditValue;
       });
       
       setCredits(newCredits);
@@ -71,20 +70,20 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
       console.error("Error fetching VTU credits:", error);
       setCreditsError("Unable to fetch credits automatically. Default values assigned based on subject patterns.");
       
-      const defaultCredits: {[key: number]: number} = {};
-      subjects.forEach((subject, index) => {
+      const defaultCredits: {[key: string]: number} = {};
+      subjects.forEach((subject) => {
         const subjectCode = subject.subjectCode || '';
         
         if (subjectCode.toLowerCase().includes('lab') || subjectCode.includes('L') || 
             subjectCode.endsWith('4') || subjectCode.endsWith('6') || 
             subjectCode.endsWith('7') || subjectCode.endsWith('8')) {
-          defaultCredits[index] = 1;
+          defaultCredits[subject.subjectCode] = 1;
         } else if (subjectCode.toLowerCase().includes('project')) {
-          defaultCredits[index] = 6;
+          defaultCredits[subject.subjectCode] = 6;
         } else if (subjectCode.includes('MAT') || subjectCode.includes('MATH')) {
-          defaultCredits[index] = 4;
+          defaultCredits[subject.subjectCode] = 4;
         } else {
-          defaultCredits[index] = 3;
+          defaultCredits[subject.subjectCode] = 3;
         }
       });
       setCredits(defaultCredits);
@@ -93,19 +92,19 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
     setIsLoadingCredits(false);
   };
 
-  const handleCreditChange = (index: number, value: string) => {
+  const handleCreditChange = (subjectCode: string, value: string) => {
     const creditValue = parseInt(value);
     setCredits(prev => ({
       ...prev,
-      [index]: isNaN(creditValue) || creditValue < 0 ? 0 : creditValue
+      [subjectCode]: isNaN(creditValue) || creditValue < 0 ? 0 : creditValue
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const subjectsWithCredits = subjects.map((subject, index) => ({
+    const subjectsWithCredits = subjects.map((subject) => ({
       ...subject,
-      credits: credits[index] !== undefined ? credits[index] : 0
+      credits: credits[subject.subjectCode] !== undefined ? credits[subject.subjectCode] : 0
     }));
     onCalculate(subjectsWithCredits);
   };
@@ -226,7 +225,7 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
         <CardContent className="pt-0">
           <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
             {subjects.map((subject, index) => (
-              <div key={index} className="p-3 md:p-4 border rounded-lg space-y-3 bg-white">
+              <div key={subject.subjectCode || index} className="p-3 md:p-4 border rounded-lg space-y-3 bg-white">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-gray-900 text-sm md:text-base break-words leading-tight">
@@ -255,17 +254,17 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
                     <p className="font-semibold text-sm md:text-base">{subject.totalMarks}</p>
                   </div>
                   <div>
-                    <Label htmlFor={`credit-${index}`} className="text-gray-600 font-medium text-xs">
+                    <Label htmlFor={`credit-${subject.subjectCode}`} className="text-gray-600 font-medium text-xs">
                       Credits
                     </Label>
                     <Input
-                      id={`credit-${index}`}
+                      id={`credit-${subject.subjectCode}`}
                       type="number"
                       min="0"
                       max="10"
                       step="1"
-                      value={credits[index] !== undefined ? credits[index] : ''}
-                      onChange={(e) => handleCreditChange(index, e.target.value)}
+                      value={credits[subject.subjectCode] !== undefined ? credits[subject.subjectCode] : ''}
+                      onChange={(e) => handleCreditChange(subject.subjectCode, e.target.value)}
                       placeholder="0"
                       disabled={isLoadingCredits}
                       className="h-8 md:h-10 text-sm"
