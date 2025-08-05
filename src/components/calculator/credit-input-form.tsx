@@ -17,7 +17,7 @@ type CreditInputFormProps = {
 }
 
 export default function CreditInputForm({ subjects, onCalculate, studentData }: CreditInputFormProps) {
-  const [credits, setCredits] = useState<{[key: string]: number}>({});
+  const [credits, setCredits] = useState<{[key: string]: string}>({});
   const [isLoadingCredits, setIsLoadingCredits] = useState(false);
   const [creditsFetched, setCreditsFetched] = useState(false);
   const [creditsError, setCreditsError] = useState<string | null>(null);
@@ -44,7 +44,7 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
       const result = await fetchCredits({ subjectCodes });
       const creditsMap = new Map(result.credits.map(c => [c.subjectCode.toUpperCase(), c.credit]));
       
-      const newCredits : {[key: string]: number} = {};
+      const newCredits : {[key: string]: string} = {};
       subjects.forEach((subject) => {
         const subjectCode = subject.subjectCode.toUpperCase();
         let creditValue = creditsMap.get(subjectCode);
@@ -60,7 +60,7 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
             creditValue = 3;
           }
         }
-        newCredits[subject.subjectCode] = creditValue;
+        newCredits[subject.subjectCode] = String(creditValue);
       });
       
       setCredits(newCredits);
@@ -70,20 +70,20 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
       console.error("Error fetching VTU credits:", error);
       setCreditsError("Unable to fetch credits automatically. Default values assigned based on subject patterns.");
       
-      const defaultCredits: {[key: string]: number} = {};
+      const defaultCredits: {[key: string]: string} = {};
       subjects.forEach((subject) => {
         const subjectCode = subject.subjectCode || '';
         
         if (subjectCode.toLowerCase().includes('lab') || subjectCode.includes('L') || 
             subjectCode.endsWith('4') || subjectCode.endsWith('6') || 
             subjectCode.endsWith('7') || subjectCode.endsWith('8')) {
-          defaultCredits[subject.subjectCode] = 1;
+          defaultCredits[subject.subjectCode] = '1';
         } else if (subjectCode.toLowerCase().includes('project')) {
-          defaultCredits[subject.subjectCode] = 6;
+          defaultCredits[subject.subjectCode] = '6';
         } else if (subjectCode.includes('MAT') || subjectCode.includes('MATH')) {
-          defaultCredits[subject.subjectCode] = 4;
+          defaultCredits[subject.subjectCode] = '4';
         } else {
-          defaultCredits[subject.subjectCode] = 3;
+          defaultCredits[subject.subjectCode] = '3';
         }
       });
       setCredits(defaultCredits);
@@ -93,18 +93,20 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
   };
 
   const handleCreditChange = (subjectCode: string, value: string) => {
-    const creditValue = parseInt(value);
-    setCredits(prev => ({
-      ...prev,
-      [subjectCode]: isNaN(creditValue) || creditValue < 0 ? 0 : creditValue
-    }));
+    // Allow only numeric input
+    if (/^\d*$/.test(value)) {
+      setCredits(prev => ({
+        ...prev,
+        [subjectCode]: value
+      }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const subjectsWithCredits = subjects.map((subject) => ({
       ...subject,
-      credits: credits[subject.subjectCode] !== undefined ? credits[subject.subjectCode] : 0
+      credits: parseInt(credits[subject.subjectCode]) || 0
     }));
     onCalculate(subjectsWithCredits);
   };
@@ -259,15 +261,15 @@ export default function CreditInputForm({ subjects, onCalculate, studentData }: 
                     </Label>
                     <Input
                       id={`credit-${subject.subjectCode}`}
-                      type="number"
-                      min="0"
-                      max="10"
-                      step="1"
-                      value={credits[subject.subjectCode] !== undefined ? credits[subject.subjectCode] : ''}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={2}
+                      value={credits[subject.subjectCode] || ''}
                       onChange={(e) => handleCreditChange(subject.subjectCode, e.target.value)}
                       placeholder="0"
                       disabled={isLoadingCredits}
-                      className="h-8 md:h-10 text-sm"
+                      className="h-8 md:h-10 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                   </div>
                 </div>
