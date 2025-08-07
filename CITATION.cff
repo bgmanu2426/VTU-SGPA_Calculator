@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
-  - family-names: "BG"
-    given-names: "Lakshminarayana"
+  - family-names: "Lakshminarayana"
+    given-names: "BG"
     orcid: "https://orcid.org/0009-0003-5407-8313"
 title: "VTU SGPA Calculator"
 version: 1.0.0
