@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Upload as UploadIcon, FileText, CheckCircle, AlertCircle, RefreshCw, Image } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Upload as UploadIcon, FileText, CheckCircle, AlertCircle, RefreshCw, Image, Info } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 
@@ -243,6 +243,19 @@ export default function UploadPage() {
             </CardHeader>
             <CardContent>
               <FileUploadZone onFileSelect={handleFileSelect} />
+               <Alert className="mt-4 bg-blue-50 border-blue-200">
+                  <Info className="h-4 w-4 text-blue-600" />
+                  <AlertTitle className="text-blue-800">Supported Schemes</AlertTitle>
+                  <AlertDescription className="text-blue-700 text-xs">
+                    This calculator is currently suitable for the following schemes:
+                    <ul className="list-disc pl-5 mt-1">
+                      <li>B.E / B.Tech / B.Plan / B.Sc (Hons.) 2021</li>
+                      <li>B.E / B.Tech 2022</li>
+                       <li>B.Arch 2021</li>
+                       <li>BBA / BCA 2023</li>
+                    </ul>
+                  </AlertDescription>
+                </Alert>
             </CardContent>
           </Card>
         )}
