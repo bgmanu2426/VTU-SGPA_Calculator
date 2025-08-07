@@ -1,8 +1,8 @@
-# SGPA Assistant
+# VTU SGPA Calculator
 
-SGPA Assistant is a modern, AI-powered web application designed to help Visvesvaraya Technological University (VTU) students effortlessly calculate their Semester Grade Point Average (SGPA) and Cumulative Grade Point Average (CGPA). Users can either upload an image of their marksheet for automatic data extraction or input their marks manually.
+VTU SGPA Calculator is a modern, AI-powered web application designed to help Visvesvaraya Technological University (VTU) students effortlessly calculate their Semester Grade Point Average (SGPA) and Cumulative Grade Point Average (CGPA). Users can either upload an image of their marksheet for automatic data extraction or input their marks manually.
 
-![SGPA Assistant Screenshot](https://placehold.co/800x400.png?text=App+Screenshot)
+![VTU SGPA Calculator Screenshot](https://placehold.co/800x400.png?text=App+Screenshot)
 
 ## Core Features
 
@@ -29,8 +29,8 @@ To run the project locally, follow these steps:
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository-url>
-    cd sgpa-assistant
+    git clone https://github.com/bgmanu2426/VTU-SGPA_Calculator.git
+    cd VTU-SGPA_Calculator
     ```
 
 2.  **Install dependencies:**
