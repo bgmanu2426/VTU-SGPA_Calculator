@@ -38,21 +38,21 @@ export default function UploadPage() {
 
     try {
       if (selectedFile.type === 'application/pdf') {
-          const imageDataUrl = await convertPdfToImage(selectedFile);
-          setPreview(imageDataUrl);
+        const imageDataUrl = await convertPdfToImage(selectedFile);
+        setPreview(imageDataUrl);
       } else {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-              setPreview(reader.result as string);
-          };
-          reader.readAsDataURL(selectedFile);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(selectedFile);
       }
     } catch (error) {
       console.error("Error processing file:", error);
       toast({
-          variant: 'destructive',
-          title: 'File Processing Failed',
-          description: 'Could not process the uploaded file. Please try again with a different file.',
+        variant: 'destructive',
+        title: 'File Processing Failed',
+        description: 'Could not process the uploaded file. Please try again with a different file.',
       });
     }
   };
@@ -60,26 +60,26 @@ export default function UploadPage() {
   const convertPdfToImage = async (file: File): Promise<string> => {
     const fileReader = new FileReader();
     return new Promise((resolve, reject) => {
-        fileReader.onload = async (e) => {
-            if (!e.target?.result) return reject(new Error("Failed to read file"));
-            const typedarray = new Uint8Array(e.target.result as ArrayBuffer);
-            const pdf = await pdfjs.getDocument(typedarray).promise;
-            const page = await pdf.getPage(1); // Use the first page
-            
-            const viewport = page.getViewport({ scale: 2.0 }); // Increase scale for better resolution
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+      fileReader.onload = async (e) => {
+        if (!e.target?.result) return reject(new Error("Failed to read file"));
+        const typedarray = new Uint8Array(e.target.result as ArrayBuffer);
+        const pdf = await pdfjs.getDocument(typedarray).promise;
+        const page = await pdf.getPage(1); // Use the first page
 
-            if (!context) return reject(new Error("Could not get canvas context"));
+        const viewport = page.getViewport({ scale: 2.0 }); // Increase scale for better resolution
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
 
-            await page.render({ canvasContext: context, viewport: viewport }).promise;
+        if (!context) return reject(new Error("Could not get canvas context"));
 
-            resolve(canvas.toDataURL('image/png'));
-        };
-        fileReader.onerror = reject;
-        fileReader.readAsArrayBuffer(file);
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+        resolve(canvas.toDataURL('image/png'));
+      };
+      fileReader.onerror = reject;
+      fileReader.readAsArrayBuffer(file);
     });
   }
 
@@ -136,15 +136,15 @@ export default function UploadPage() {
       }
     } catch (error: any) {
       console.error("Error processing marksheet:", error);
-      
+
       let errorMessage = "Failed to extract data from the marksheet. ";
-      
+
       if (file.type === 'application/pdf') {
         errorMessage += "PDF processing encountered an issue. ";
       }
-      
+
       errorMessage += "Please try again or enter the details manually.";
-      
+
       setError(errorMessage);
     }
 
@@ -208,8 +208,8 @@ export default function UploadPage() {
                 <p className="text-sm">{error}</p>
                 <div className="flex flex-col sm:flex-row gap-2">
                   {extractionAttempts < 2 && (
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       onClick={processMarksheet}
                       disabled={isProcessing}
@@ -219,8 +219,8 @@ export default function UploadPage() {
                       Try Again
                     </Button>
                   )}
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     onClick={handleManualEntry}
                     className="bg-white hover:bg-gray-50 text-sm"
@@ -243,19 +243,19 @@ export default function UploadPage() {
             </CardHeader>
             <CardContent>
               <FileUploadZone onFileSelect={handleFileSelect} />
-               <Alert className="mt-4 bg-blue-50 border-blue-200">
-                  <Info className="h-4 w-4 text-blue-600" />
-                  <AlertTitle className="text-blue-800">Supported Schemes</AlertTitle>
-                  <AlertDescription className="text-blue-700 text-xs">
-                    This calculator is currently suitable for the following schemes:
-                    <ul className="list-disc pl-5 mt-1">
-                      <li>B.E / B.Tech / B.Plan / B.Sc (Hons.) 2021</li>
-                      <li>B.E / B.Tech 2022</li>
-                       <li>B.Arch 2021</li>
-                       <li>BBA / BCA 2023</li>
-                    </ul>
-                  </AlertDescription>
-                </Alert>
+              <Alert className="mt-4 bg-blue-50 border-blue-200">
+                <Info className="h-4 w-4 text-blue-600" />
+                <AlertTitle className="text-blue-800">Supported Schemes</AlertTitle>
+                <AlertDescription className="text-blue-700 text-xs">
+                  This calculator is currently suitable for the following schemes:
+                  <ul className="list-disc pl-5 mt-1">
+                    <li>B.E / B.Tech / B.Plan / B.Sc (Hons.) 2021</li>
+                    <li>B.E / B.Tech 2022</li>
+                    <li>BBA / BCA 2023</li>
+                    <li>B.E / B.Tech 2025</li>
+                  </ul>
+                </AlertDescription>
+              </Alert>
             </CardContent>
           </Card>
         )}
@@ -285,9 +285,9 @@ export default function UploadPage() {
                   </div>
                 )}
               </div>
-              
+
               <div className="space-y-4">
-                <Button 
+                <Button
                   onClick={processMarksheet}
                   disabled={isProcessing}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-base w-full sm:w-auto"
@@ -304,10 +304,10 @@ export default function UploadPage() {
                     </>
                   )}
                 </Button>
-                
+
                 <div className="text-center">
-                  <Button 
-                    variant="link" 
+                  <Button
+                    variant="link"
                     onClick={handleManualEntry}
                     className="text-gray-600 text-sm"
                   >
@@ -328,7 +328,7 @@ export default function UploadPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ExtractedDataPreview 
+              <ExtractedDataPreview
                 data={extractedData}
                 onConfirm={handleDataConfirm}
                 onEdit={() => setStep(1)}

@@ -101,24 +101,6 @@ export default function FileUploadZone({ onFileSelect }: {onFileSelect: (file: F
           </div>
         </div>
       </div>
-
-      {/* Enhanced Feature Box */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3 md:p-4">
-        <div className="flex items-start gap-2 md:gap-3">
-          <Zap className="w-4 h-4 md:w-5 md:h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-          <div className="text-xs md:text-sm">
-            <p className="font-medium text-blue-800 mb-1">Smart PDF Processing:</p>
-            <p className="text-blue-700 mb-2">
-              PDF files are automatically converted to high-quality images for better text extraction accuracy.
-            </p>
-            <ul className="text-blue-600 text-xs space-y-1">
-              <li>• PDF pages converted to 2x resolution images</li>
-              <li>• Enhanced OCR accuracy for marksheet data</li>
-              <li>• Support for multi-page PDFs</li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
