@@ -1,8 +1,16 @@
 # VTU SGPA Calculator
 
-VTU SGPA Calculator is a modern, AI-powered web application designed to help Visvesvaraya Technological University (VTU) students effortlessly calculate their Semester Grade Point Average (SGPA) and Cumulative Grade Point Average (CGPA). Users can either upload an image of their marksheet for automatic data extraction or input their marks manually.
+During my Engineering journey as a VTU student, I noticed one common frustration calculating SGPA & CGPA manually every semester.
 
-![VTU SGPA Calculator Screenshot](https://placehold.co/800x400.png?text=App+Screenshot)
+When results are published in marks, we have to manually calculate the SGPA for each semester and then the CGPA… or rely on online tools where we still need to type subject names, codes, internals, and externals manually. It’s time-consuming, error-prone, and honestly… not the best way to spend your time after a long exam season. 😅
+
+## My Solution
+
+ I built a VTU SGPA & CGPA Calculator 🧮 using Next.js + TypeScript + Gemini AI + Radix UI, hosted on Vercel, making the process quick, accurate, and stress-free!
+
+Just upload the screenshot or PDF of your original result and boom you get your SGPA instantly ✨
+
+![VTU SGPA Calculator Screenshot](/public/images/home.png)
 
 ## Core Features
 
@@ -21,7 +29,6 @@ VTU SGPA Calculator is a modern, AI-powered web application designed to help Vis
 -   **AI/Generative**: [Firebase Genkit](https://firebase.google.com/docs/genkit) with [Google's Gemini API](https://ai.google.dev/)
 -   **UI Components**: [ShadCN UI](https://ui.shadcn.com/)
 -   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
--   **Deployment**: Firebase App Hosting (optional)
 
 ## Getting Started
 
