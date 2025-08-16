@@ -3,6 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AppLayout } from '@/components/layout';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: 'VTU SGPA & CGPA Calculator - Fast & Accurate',
@@ -33,7 +35,9 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <SidebarProvider>
           <AppLayout>
-              {children}
+            {children}
+            <Analytics />
+            <SpeedInsights />
           </AppLayout>
         </SidebarProvider>
         <Toaster />
