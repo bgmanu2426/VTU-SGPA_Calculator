@@ -198,7 +198,7 @@ const Sidebar = React.forwardRef<
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
-            className="w-[--sidebar-width] bg-background p-0 text-sidebar-foreground [&>button]:hidden"
+            className="w-[--sidebar-width] bg-white p-0 text-sidebar-foreground [&>button]:hidden"
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -206,9 +206,9 @@ const Sidebar = React.forwardRef<
             }
             side={side}
           >
-            <SheetHeader>
-              <SheetTitle></SheetTitle>
-              <SheetDescription></SheetDescription>
+            <SheetHeader className="hidden">
+              <SheetTitle>Sidebar</SheetTitle>
+              <SheetDescription>Navigation and tools</SheetDescription>
             </SheetHeader>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
@@ -539,7 +539,7 @@ const sidebarMenuButtonVariants = cva(
 
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<"button"> & {
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
     asChild?: boolean
     isActive?: boolean
     tooltip?: string | React.ComponentProps<typeof TooltipContent>

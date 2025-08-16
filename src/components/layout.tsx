@@ -15,7 +15,7 @@ import {
   SidebarHeader,
   SidebarTrigger,
   SidebarInset,
-  SidebarProvider
+  useSidebar
 } from "@/components/ui/sidebar";
 
 
@@ -39,6 +39,11 @@ const navigationItems = [
 
 export function AppLayout({ children }: {children: React.ReactNode}) {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
+
+  const handleLinkClick = () => {
+    setOpenMobile(false);
+  };
 
   return (
       <>
@@ -89,6 +94,7 @@ export function AppLayout({ children }: {children: React.ReactNode}) {
                               ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-700' 
                               : 'hover:bg-gray-50'
                           }`}
+                          onClick={handleLinkClick}
                         >
                           <Link href={item.url} className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3">
                             <item.icon className="w-4 h-4 md:w-5 md:h-5" />
