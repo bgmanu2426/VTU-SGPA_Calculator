@@ -18,6 +18,7 @@ import {
   SidebarInset,
   useSidebar
 } from "@/components/ui/sidebar";
+import { PWAInstallButton, PWAInstallButtonTopBar } from "@/components/pwa-install-button";
 
 
 const navigationItems = [
@@ -158,12 +159,14 @@ export function AppLayout({ children }: {children: React.ReactNode}) {
         </Sidebar>
         <SidebarInset>
             <main className="flex-1 flex flex-col bg-gray-50">
-                <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-3 md:py-4 md:hidden">
+                <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-3 md:py-4">
                     <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <SidebarTrigger className="hover:bg-gray-100 p-2 rounded-lg" />
-                        <h1 className="text-lg font-semibold text-gray-900">VTU SGPA Calculator</h1>
+                        <SidebarTrigger className="hover:bg-gray-100 p-2 rounded-lg md:hidden" />
+                        <h1 className="text-lg font-semibold text-gray-900 hidden md:block">VTU SGPA Calculator</h1>
+                        <h1 className="text-lg font-semibold text-gray-900 md:hidden">VTU Calculator</h1>
                     </div>
+                    <PWAInstallButtonTopBar />
                     </div>
                 </header>
 
@@ -175,6 +178,8 @@ export function AppLayout({ children }: {children: React.ReactNode}) {
                     Made by <a href="https://lnbg.in/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-semibold">@bgmanu</a>
                     </footer>
                 </div>
+                
+                <PWAInstallButton />
             </main>
         </SidebarInset>
     </>
