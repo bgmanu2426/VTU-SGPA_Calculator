@@ -14,6 +14,7 @@ import { extractMarksheetData, ExtractMarksheetDataOutput } from "@/ai/flows/ext
 import { useToast } from "@/hooks/use-toast";
 import * as pdfjs from 'pdfjs-dist';
 import { AppLayout } from "@/components/layout";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 // Set worker source
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -165,182 +166,184 @@ export default function UploadPage() {
   };
 
   return (
-    <AppLayout>
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Upload Your Marksheet
-          </h1>
-          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-            Upload your VTU marksheet (PDF or Image).
-          </p>
-        </div>
+    <SidebarProvider>
+      <AppLayout>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 md:p-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8 md:mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Upload Your Marksheet
+            </h1>
+            <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+              Upload your VTU marksheet (PDF or Image).
+            </p>
+          </div>
 
-        {/* Progress Steps */}
-        <div className="flex justify-center mb-8 md:mb-12">
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            <div className={`flex items-center ${step >= 1 ? 'text-blue-600' : 'text-gray-400'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
-                1
+          {/* Progress Steps */}
+          <div className="flex justify-center mb-8 md:mb-12">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className={`flex items-center ${step >= 1 ? 'text-blue-600' : 'text-gray-400'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+                  1
+                </div>
+                <span className="ml-2 font-medium text-sm sm:text-base">Upload</span>
               </div>
-              <span className="ml-2 font-medium text-sm sm:text-base">Upload</span>
-            </div>
-            <div className={`w-6 sm:w-12 h-0.5 ${step >= 2 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
-            <div className={`flex items-center ${step >= 2 ? 'text-blue-600' : 'text-gray-400'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
-                2
+              <div className={`w-6 sm:w-12 h-0.5 ${step >= 2 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
+              <div className={`flex items-center ${step >= 2 ? 'text-blue-600' : 'text-gray-400'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+                  2
+                </div>
+                <span className="ml-2 font-medium text-sm sm:text-base">Process</span>
               </div>
-              <span className="ml-2 font-medium text-sm sm:text-base">Process</span>
-            </div>
-            <div className={`w-6 sm:w-12 h-0.5 ${step >= 3 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
-            <div className={`flex items-center ${step >= 3 ? 'text-blue-600' : 'text-gray-400'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
-                3
+              <div className={`w-6 sm:w-12 h-0.5 ${step >= 3 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
+              <div className={`flex items-center ${step >= 3 ? 'text-blue-600' : 'text-gray-400'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+                  3
+                </div>
+                <span className="ml-2 font-medium text-sm sm:text-base">Review</span>
               </div>
-              <span className="ml-2 font-medium text-sm sm:text-base">Review</span>
             </div>
           </div>
-        </div>
 
-        {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              <div className="space-y-3">
-                <p className="text-sm">{error}</p>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  {extractionAttempts < 2 && (
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="space-y-3">
+                  <p className="text-sm">{error}</p>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    {extractionAttempts < 2 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={processMarksheet}
+                        disabled={isProcessing}
+                        className="bg-white hover:bg-gray-50 text-sm"
+                      >
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                        Try Again
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={processMarksheet}
-                      disabled={isProcessing}
+                      onClick={handleManualEntry}
                       className="bg-white hover:bg-gray-50 text-sm"
                     >
-                      <RefreshCw className="w-4 h-4 mr-2" />
-                      Try Again
+                      Enter Manually Instead
                     </Button>
-                  )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleManualEntry}
-                    className="bg-white hover:bg-gray-50 text-sm"
-                  >
-                    Enter Manually Instead
-                  </Button>
-                </div>
-              </div>
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {step === 1 && (
-          <Card className="shadow-xl border-0">
-            <CardHeader className="text-center pb-4">
-              <CardTitle className="flex items-center justify-center gap-2 text-lg md:text-xl">
-                <UploadIcon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
-                Select Marksheet File
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <FileUploadZone onFileSelect={handleFileSelect} />
-              <Alert className="mt-4 bg-blue-50 border-blue-200">
-                <Info className="h-4 w-4 text-blue-600" />
-                <AlertTitle className="text-blue-800">Supported Schemes</AlertTitle>
-                <AlertDescription className="text-blue-700 text-xs">
-                  This calculator is currently suitable for the following schemes:
-                  <ul className="list-disc pl-5 mt-1">
-                    <li>B.E / B.Tech / B.Plan / B.Sc (Hons.) 2021</li>
-                    <li>B.E / B.Tech 2022</li>
-                    <li>BBA / BCA 2023</li>
-                    <li>B.E / B.Tech 2025</li>
-                  </ul>
-                </AlertDescription>
-              </Alert>
-            </CardContent>
-          </Card>
-        )}
-
-        {step === 2 && file && (
-          <Card className="shadow-xl border-0">
-            <CardHeader className="text-center pb-4">
-              <CardTitle className="flex items-center justify-center gap-2 text-lg md:text-xl">
-                <FileText className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
-                Process Marksheet
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-center">
-              <div className="mb-6">
-                <p className="text-base font-medium text-gray-900 mb-2 break-all">
-                  Selected File: {file.name}
-                </p>
-                <p className="text-sm text-gray-600 mb-2">
-                  File size: {(file.size / 1024 / 1024).toFixed(2)} MB
-                </p>
-                <p className="text-sm text-gray-500 mb-4">
-                  File type: {file.type === 'application/pdf' ? 'PDF' : 'Image'}
-                </p>
-                {processingStep && (
-                  <div className="flex items-center justify-center gap-2 text-blue-600">
-                    <span className="text-sm font-medium">{processingStep}</span>
                   </div>
-                )}
-              </div>
-
-              <div className="space-y-4">
-                <Button
-                  onClick={processMarksheet}
-                  disabled={isProcessing}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-base w-full sm:w-auto"
-                >
-                  {isProcessing ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      {file.type === 'application/pdf' ? <Image className="w-5 h-5 mr-2" /> : <FileText className="w-5 h-5 mr-2" />}
-                      {file.type === 'application/pdf' ? 'Convert & Extract Data' : 'Extract Data'}
-                    </>
-                  )}
-                </Button>
-
-                <div className="text-center">
-                  <Button
-                    variant="link"
-                    onClick={handleManualEntry}
-                    className="text-gray-600 text-sm"
-                  >
-                    Skip extraction and enter manually
-                  </Button>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+              </AlertDescription>
+            </Alert>
+          )}
 
-        {step === 3 && extractedData && (
-          <Card className="shadow-xl border-0">
-            <CardHeader className="text-center pb-4">
-              <CardTitle className="flex items-center justify-center gap-2 text-lg md:text-xl">
-                <CheckCircle className="w-6 h-6 text-green-600" />
-                Review Extracted Data
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ExtractedDataPreview
-                data={extractedData}
-                onConfirm={handleDataConfirm}
-                onEdit={() => setStep(1)}
-              />
-            </CardContent>
-          </Card>
-        )}
+          {step === 1 && (
+            <Card className="shadow-xl border-0">
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="flex items-center justify-center gap-2 text-lg md:text-xl">
+                  <UploadIcon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
+                  Select Marksheet File
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <FileUploadZone onFileSelect={handleFileSelect} />
+                <Alert className="mt-4 bg-blue-50 border-blue-200">
+                  <Info className="h-4 w-4 text-blue-600" />
+                  <AlertTitle className="text-blue-800">Supported Schemes</AlertTitle>
+                  <AlertDescription className="text-blue-700 text-xs">
+                    This calculator is currently suitable for the following schemes:
+                    <ul className="list-disc pl-5 mt-1">
+                      <li>B.E / B.Tech / B.Plan / B.Sc (Hons.) 2021</li>
+                      <li>B.E / B.Tech 2022</li>
+                      <li>BBA / BCA 2023</li>
+                      <li>B.E / B.Tech 2025</li>
+                    </ul>
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
+          )}
+
+          {step === 2 && file && (
+            <Card className="shadow-xl border-0">
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="flex items-center justify-center gap-2 text-lg md:text-xl">
+                  <FileText className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
+                  Process Marksheet
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <div className="mb-6">
+                  <p className="text-base font-medium text-gray-900 mb-2 break-all">
+                    Selected File: {file.name}
+                  </p>
+                  <p className="text-sm text-gray-600 mb-2">
+                    File size: {(file.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    File type: {file.type === 'application/pdf' ? 'PDF' : 'Image'}
+                  </p>
+                  {processingStep && (
+                    <div className="flex items-center justify-center gap-2 text-blue-600">
+                      <span className="text-sm font-medium">{processingStep}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-4">
+                  <Button
+                    onClick={processMarksheet}
+                    disabled={isProcessing}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-base w-full sm:w-auto"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        {file.type === 'application/pdf' ? <Image className="w-5 h-5 mr-2" /> : <FileText className="w-5 h-5 mr-2" />}
+                        {file.type === 'application/pdf' ? 'Convert & Extract Data' : 'Extract Data'}
+                      </>
+                    )}
+                  </Button>
+
+                  <div className="text-center">
+                    <Button
+                      variant="link"
+                      onClick={handleManualEntry}
+                      className="text-gray-600 text-sm"
+                    >
+                      Skip extraction and enter manually
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {step === 3 && extractedData && (
+            <Card className="shadow-xl border-0">
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="flex items-center justify-center gap-2 text-lg md:text-xl">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                  Review Extracted Data
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ExtractedDataPreview
+                  data={extractedData}
+                  onConfirm={handleDataConfirm}
+                  onEdit={() => setStep(1)}
+                />
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
-    </div>
-    </AppLayout>
+      </AppLayout>
+    </SidebarProvider>
   );
 }

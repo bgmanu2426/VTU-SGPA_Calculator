@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { SidebarProvider } from '@/components/ui/sidebar';
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
@@ -32,11 +31,9 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <SidebarProvider>
-            {children}
-            <Analytics />
-            <SpeedInsights />
-        </SidebarProvider>
+        {children}
+        <Analytics />
+        <SpeedInsights />
         <Toaster />
       </body>
     </html>

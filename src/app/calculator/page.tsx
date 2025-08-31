@@ -12,6 +12,7 @@ import SGPAResultCard from "@/components/calculator/sgpa-result-card";
 import ManualEntryForm from "@/components/calculator/manual-entry-form";
 import { StudentDetails, SubjectDetails } from "@/types";
 import { AppLayout } from "@/components/layout";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 type SgpaResult = {
   sgpa: number;
@@ -484,5 +485,5 @@ export default function CalculatorPage() {
     );
   };
 
-  return <AppLayout>{pageContent()}</AppLayout>;
+  return <SidebarProvider><AppLayout>{pageContent()}</AppLayout></SidebarProvider>;
 }
