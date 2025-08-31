@@ -62,13 +62,6 @@ export default function HomePage() {
                 <Link href="/upload">Get Started</Link>
               </Button>
             </nav>
-            <div className="md:hidden">
-              <Button asChild>
-                <Link href="/upload">
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-              </Button>
-            </div>
           </div>
         </div>
       </header>

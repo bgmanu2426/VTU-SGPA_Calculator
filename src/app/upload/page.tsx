@@ -13,6 +13,7 @@ import ExtractedDataPreview from "@/components/upload/extracted-data-preview";
 import { extractMarksheetData, ExtractMarksheetDataOutput } from "@/ai/flows/extract-marksheet-data";
 import { useToast } from "@/hooks/use-toast";
 import * as pdfjs from 'pdfjs-dist';
+import { AppLayout } from "@/components/layout";
 
 // Set worker source
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -164,6 +165,7 @@ export default function UploadPage() {
   };
 
   return (
+    <AppLayout>
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8 md:mb-12">
@@ -339,5 +341,6 @@ export default function UploadPage() {
         )}
       </div>
     </div>
+    </AppLayout>
   );
 }

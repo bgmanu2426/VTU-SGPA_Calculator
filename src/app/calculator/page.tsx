@@ -11,6 +11,7 @@ import CreditInputForm from "@/components/calculator/credit-input-form";
 import SGPAResultCard from "@/components/calculator/sgpa-result-card";
 import ManualEntryForm from "@/components/calculator/manual-entry-form";
 import { StudentDetails, SubjectDetails } from "@/types";
+import { AppLayout } from "@/components/layout";
 
 type SgpaResult = {
   sgpa: number;
@@ -413,71 +414,75 @@ export default function CalculatorPage() {
     doc.save(`${studentData.studentDetails.name}_${studentData.studentDetails.usn}_SGPA_${sgpa}.pdf`);
   };
   
-  if (mode === 'loading') {
+  const pageContent = () => {
+    if (mode === 'loading') {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 md:p-8 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading Calculator...</p>
+          </div>
+        </div>
+      );
+    }
+  
+    if (mode === 'manual') {
+      return <ManualEntryForm onProceed={handleManualDataProceed} />;
+    }
+  
+    if (!studentData) {
+      // This case should ideally not be reached if mode logic is correct.
+      // But as a fallback, we can show the manual entry form.
+      return <ManualEntryForm onProceed={handleManualDataProceed} />;
+    }
+  
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 md:p-8 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading Calculator...</p>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 md:p-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8 md:mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              SGPA Calculator
+            </h1>
+            <p className="text-base md:text-lg text-gray-600">
+              Credits are automatically fetched and sometimes may be incorrect. Please verify and edit if needed.
+            </p>
+          </div>
+  
+          <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
+            <div>
+              <CreditInputForm
+                subjects={subjects}
+                onCalculate={handleCalculate}
+                studentData={studentData}
+              />
+            </div>
+  
+            <div className="sticky top-8 self-start">
+              {sgpaResult && (
+                <div className="space-y-6">
+                  <SGPAResultCard
+                    sgpa={sgpaResult.sgpa}
+                    totalCredits={sgpaResult.totalCredits}
+                    subjects={sgpaResult.subjects}
+                  />
+                  
+                  <div className="text-center">
+                    <Button 
+                      onClick={generateSGPAMarksheet}
+                      className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 w-full sm:w-auto text-base"
+                    >
+                      <Download className="w-5 h-5 mr-2" />
+                      Download SGPA Marksheet
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     );
-  }
+  };
 
-  if (mode === 'manual') {
-    return <ManualEntryForm onProceed={handleManualDataProceed} />;
-  }
-
-  if (!studentData) {
-    // This case should ideally not be reached if mode logic is correct.
-    // But as a fallback, we can show the manual entry form.
-    return <ManualEntryForm onProceed={handleManualDataProceed} />;
-  }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            SGPA Calculator
-          </h1>
-          <p className="text-base md:text-lg text-gray-600">
-            Credits are automatically fetched and sometimes may be incorrect. Please verify and edit if needed.
-          </p>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
-          <div>
-            <CreditInputForm
-              subjects={subjects}
-              onCalculate={handleCalculate}
-              studentData={studentData}
-            />
-          </div>
-
-          <div className="sticky top-8 self-start">
-            {sgpaResult && (
-              <div className="space-y-6">
-                <SGPAResultCard
-                  sgpa={sgpaResult.sgpa}
-                  totalCredits={sgpaResult.totalCredits}
-                  subjects={sgpaResult.subjects}
-                />
-                
-                <div className="text-center">
-                  <Button 
-                    onClick={generateSGPAMarksheet}
-                    className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 w-full sm:w-auto text-base"
-                  >
-                    <Download className="w-5 h-5 mr-2" />
-                    Download SGPA Marksheet
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return <AppLayout>{pageContent()}</AppLayout>;
 }
