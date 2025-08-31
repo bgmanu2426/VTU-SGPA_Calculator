@@ -50,6 +50,14 @@ export function AppLayout({ children }: {children: React.ReactNode}) {
   const handleLinkClick = () => {
     setOpenMobile(false);
   };
+  
+  if (pathname === '/') {
+    return (
+      <>
+        {children}
+      </>
+    );
+  }
 
   return (
       <>

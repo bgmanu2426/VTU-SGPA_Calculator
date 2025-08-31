@@ -39,23 +39,26 @@ const features = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="py-20 md:py-32 text-center px-4">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4 font-headline">
-            The Easiest Way to Calculate Your VTU SGPA & CGPA
+      <section className="relative py-20 md:py-32 text-center px-4 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-green-50 -z-10"></div>
+        <div className="max-w-4xl mx-auto relative">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4 font-headline animate-fade-in-down">
+            <span className="bg-gradient-to-r from-blue-600 to-green-500 text-transparent bg-clip-text">
+              VTU SGPA & CGPA Calculator
+            </span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-in-up">
             Tired of manual calculations? Just upload your marksheet, and let our AI-powered tool do the work for you. Fast, accurate, and free.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
+            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto shadow-lg hover:shadow-xl transition-shadow">
               <Link href="/upload">
                 Get Started <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto bg-white/50 backdrop-blur-sm shadow-lg hover:shadow-xl transition-shadow">
               <Link href="/cgpa-calculator">
                 CGPA Calculator
               </Link>
@@ -65,7 +68,7 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 bg-white px-4">
+      <section className="py-16 md:py-24 bg-gray-50 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-headline">Core Features</h2>
@@ -73,7 +76,7 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+              <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col bg-white">
                 <CardHeader className="flex-shrink-0">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-gray-100 rounded-full">
@@ -86,7 +89,7 @@ export default function HomePage() {
                   <p className="text-gray-600">{feature.description}</p>
                 </CardContent>
                 <div className="p-6 pt-0">
-                  <Button asChild variant="link" className="p-0 text-blue-600">
+                  <Button asChild variant="link" className="p-0 text-blue-600 font-semibold">
                     <Link href={feature.link}>
                       {feature.cta} <ArrowRight className="w-4 h-4 ml-1" />
                     </Link>
@@ -97,6 +100,19 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+       {/* Footer */}
+       <footer className="bg-gray-900 text-white p-8 text-center">
+            <div className="max-w-6xl mx-auto">
+                <h3 className="text-2xl font-bold mb-2 font-headline">VTU SGPA Calculator</h3>
+                <p className="text-gray-400 mb-4">
+                    Your reliable partner for academic calculations.
+                </p>
+                <div className="text-gray-400 text-sm">
+                    Made with ❤️ by <a href="https://lnbg.in/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline font-semibold">@bgmanu</a>
+                </div>
+            </div>
+        </footer>
     </div>
   );
 }
