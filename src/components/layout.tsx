@@ -1,8 +1,9 @@
+
 'use client';
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calculator, Upload, GraduationCap, Medal } from "lucide-react";
+import { Calculator, Upload, GraduationCap, Medal, Home } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -21,8 +22,13 @@ import {
 
 const navigationItems = [
   {
-    title: "Upload Marksheet",
+    title: "Home",
     url: "/",
+    icon: Home,
+  },
+  {
+    title: "Upload Marksheet",
+    url: "/upload",
     icon: Upload,
   },
   {

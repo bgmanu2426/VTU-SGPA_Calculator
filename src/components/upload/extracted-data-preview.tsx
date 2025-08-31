@@ -1,3 +1,4 @@
+
 'use client';
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -105,7 +106,7 @@ export default function ExtractedDataPreview({ data, onConfirm, onEdit }: { data
         </Button>
         <Button 
           variant="outline" 
-          onClick={onEdit}
+          onClick={() => onEdit()}
           className="flex items-center justify-center gap-2 w-full sm:w-auto text-base py-3"
         >
           <Edit className="w-5 h-5" />
