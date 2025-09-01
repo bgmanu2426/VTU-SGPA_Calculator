@@ -16,7 +16,7 @@ Fast, accurate VTU SGPA and CGPA calculator with AI-powered marksheet extraction
 
 ## Mobile app download
 
-- Android (APK direct download): REPLACE_WITH_APK_LINK
+- Android (APK direct download): [VTU Calculator app](https://github.com/bgmanu2426/VTU-SGPA_Calculator/releases/download/1.0.0/SGPA.Calculator.apk)
 - iOS: Install the PWA from Safari (open the site, tap Share → Add to Home Screen).
 
 Tip: This app is a PWA. Users on Android and iOS can install it directly from the browser as “Add to Home Screen” or "Install App" if a store link isn’t available yet.
@@ -27,7 +27,7 @@ Tip: This app is a PWA. Users on Android and iOS can install it directly from th
 
 The live site is hosted on Vercel.
 
-- Live URL: https://vtusgpacalculator.vercel.app
+- Live URL: [Live Preview](https://vtusgpacalculator.vercel.app)
 
 ---
 
