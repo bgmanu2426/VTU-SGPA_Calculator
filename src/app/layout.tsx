@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import ServiceWorkerRegister from '@/components/service-worker-register';
 
 export const metadata: Metadata = {
   title: 'VTU SGPA & CGPA Calculator - Fast & Accurate',
@@ -55,6 +56,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         <Toaster />
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
