@@ -1,7 +1,8 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 import withPWA from 'next-pwa';
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ['http://localhost:9002', 'https://vtusgpacalculator.vercel.app', 'http://127.0.0.1:9002', 'http://127.0.0.1:3000'],
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,

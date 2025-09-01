@@ -1,9 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Calculator as CalculatorIcon, Download, FileText } from "lucide-react";
+import { Download } from "lucide-react";
 import { format } from "date-fns";
 import { jsPDF } from "jspdf";
 
@@ -21,7 +19,6 @@ type SgpaResult = {
 }
 
 export default function CalculatorPage() {
-  const router = useRouter();
   const [studentData, setStudentData] = useState<{ studentDetails: StudentDetails, subjectDetails: SubjectDetails[] } | null>(null);
   const [subjects, setSubjects] = useState<SubjectDetails[]>([]);
   const [sgpaResult, setSgpaResult] = useState<SgpaResult | null>(null);
@@ -136,7 +133,7 @@ export default function CalculatorPage() {
       return "Fail";
     };
 
-    const getShortBranchName = (branchName: string | undefined) => {
+    const getShortBranchName = (branchName: string | 'Helvetica') => {
       if (!branchName) return '';
       const name = branchName.toLowerCase().trim();
       const mappings: {[key: string]: string} = {
@@ -151,6 +148,9 @@ export default function CalculatorPage() {
         'robotics and artificial intelligence': 'R&AI',
         'artificial intelligence and machine learning': 'AI&ML',
         'artificial intelligence and data science': 'AI&DS',
+        'computer science and engineering (artificial intelligence)': 'CSE(AI)',
+        'computer science and engineering (data science)': 'CSE(DS)',
+        'information technology': 'IT',
       };
 
       for (const fullName in mappings) {
@@ -169,11 +169,11 @@ export default function CalculatorPage() {
       
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(20);
-      doc.setFont(undefined, 'bold');
+      doc.setFont('Helvetica', 'bold');
       doc.text('VISVESVARAYA TECHNOLOGICAL UNIVERSITY', pageWidth / 2, 18, { align: 'center' });
       
       doc.setFontSize(14);
-      doc.setFont(undefined, 'normal');
+      doc.setFont('Helvetica', 'normal');
       doc.text('Belagavi, Karnataka - 590018', pageWidth / 2, 28, { align: 'center' });
       doc.text('SEMESTER GRADE POINT AVERAGE (SGPA) STATEMENT', pageWidth / 2, 36, { align: 'center' });
 
@@ -188,21 +188,21 @@ export default function CalculatorPage() {
 
       doc.setTextColor(lightGray[0], lightGray[1], lightGray[2]);
       doc.setFontSize(8);
-      doc.setFont(undefined, 'normal');
+      doc.setFont('Helvetica', 'normal');
       doc.text(`Page ${pageNum} of ${totalPages}`, pageWidth / 2, footerY + 8, { align: 'center' });
       doc.text('This is a computer-generated statement and does not require a signature.', margin, footerY + 14);
 
       doc.setTextColor(vtuBlue[0], vtuBlue[1], vtuBlue[2]);
-      (doc as any).textWithLink('Made by @bgmanu', margin, footerY + 20, { url: 'https://lnbg.in/' });
+      (doc as any).textWithLink('Generated using VTU SGPA Calculator', margin, footerY + 20, { url: 'https://vtusgpacalculator.vercel.app/' });
       doc.setTextColor(lightGray[0], lightGray[1], lightGray[2]);
-      doc.text(`(Generated on ${format(new Date(), 'dd MMMM yyyy, HH:mm')})`, margin + 30, footerY + 20);
+      doc.text(`(Generated on ${format(new Date(), 'dd MMMM yyyy, HH:mm')})`, margin + 60, footerY + 20);
     };
 
     addHeader(1);
 
     doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text('STUDENT INFORMATION', margin, yPos);
     
     yPos += 8;
@@ -215,30 +215,30 @@ export default function CalculatorPage() {
     
     doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     doc.setFontSize(11);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     
     doc.text('Student Name:', margin + 5, yPos + 10);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('Helvetica', 'normal');
     doc.text(studentData.studentDetails.name, margin + 40, yPos + 10);
     
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text('USN:', margin + 5, yPos + 18);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('Helvetica', 'normal');
     doc.text(studentData.studentDetails.usn, margin + 40, yPos + 18);
     
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text('Date:', margin + 5, yPos + 26);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('Helvetica', 'normal');
     doc.text(format(new Date(), 'dd/MM/yyyy'), margin + 40, yPos + 26);
     
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text('Semester:', margin + 105, yPos + 10);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('Helvetica', 'normal');
     doc.text(studentData.studentDetails.semester || 'Not specified', margin + 135, yPos + 10);
     
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text('Branch:', margin + 105, yPos + 18);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('Helvetica', 'normal');
     doc.text(getShortBranchName(studentData.studentDetails.branch) || 'Not specified', margin + 135, yPos + 18);
     
     const sgpaBoxWidth = 50;
@@ -251,14 +251,14 @@ export default function CalculatorPage() {
     
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text(`SGPA: ${sgpa}`, sgpaBoxX + sgpaBoxWidth/2, sgpaBoxY + 8, { align: 'center' });
     
     yPos += 45;
 
     doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text('SUBJECT-WISE PERFORMANCE', pageWidth / 2, yPos, { align: 'center' });
     yPos += 8;
     
@@ -276,7 +276,7 @@ export default function CalculatorPage() {
       
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(9);
-      doc.setFont(undefined, 'bold');
+      doc.setFont('Helvetica', 'bold');
       
       tableHeaders.forEach((header, i) => {
         doc.text(header, colPositions[i], yPos + 6);
@@ -292,9 +292,9 @@ export default function CalculatorPage() {
       const rowHeight = Math.max(8, subjectNameLines.length * 4 + 2);
 
       if (yPos + rowHeight > pageHeight - 40) {
-        addFooter(doc.internal.getNumberOfPages(), (doc as any).internal.getNumberOfPages());
+        addFooter(doc.getNumberOfPages(), doc.getNumberOfPages());
         doc.addPage();
-        addHeader(doc.internal.getNumberOfPages());
+        addHeader(doc.getNumberOfPages());
         drawTableHeader();
       }
 
@@ -305,7 +305,7 @@ export default function CalculatorPage() {
 
       doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
       doc.setFontSize(9);
-      doc.setFont(undefined, 'normal');
+      doc.setFont('Helvetica', 'normal');
 
       doc.text(subject.subjectCode || '', colPositions[0], yPos + 5);
 
@@ -328,7 +328,7 @@ export default function CalculatorPage() {
     
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     
     const totalIA = subjects.reduce((sum, subject) => sum + (subject.internalMarks || 0), 0);
     const totalEA = subjects.reduce((sum, subject) => sum + (subject.externalMarks || 0), 0);
@@ -344,9 +344,9 @@ export default function CalculatorPage() {
     yPos += 15;
     
     if (yPos + 40 > pageHeight - 40) {
-      addFooter(doc.internal.getNumberOfPages(), (doc as any).internal.getNumberOfPages());
+      addFooter(doc.getNumberOfPages(), doc.getNumberOfPages());
       doc.addPage();
-      addHeader(doc.internal.getNumberOfPages());
+      addHeader(doc.getNumberOfPages());
     }
 
     yPos += 10;
@@ -358,30 +358,30 @@ export default function CalculatorPage() {
     
     doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     doc.setFontSize(12);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text('CALCULATION SUMMARY', pageWidth / 2, yPos + 8, { align: 'center' });
     
     doc.setFontSize(10);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('Helvetica', 'normal');
     doc.text(`Total Credits Earned: ${totalCreditsEarned}`, margin + 10, yPos + 18);
     doc.text(`Total Subjects: ${subjects.length}`, margin + 10, yPos + 24);
     
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text(`SGPA: ${sgpa}`, margin + 95, yPos + 18);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('Helvetica', 'normal');
     doc.text(`(${getSGPAGrade(sgpa)})`, margin + 95, yPos + 24);
     
     yPos += 40;
     if (yPos + 50 > pageHeight - 40) {
-      addFooter(doc.internal.getNumberOfPages(), (doc as any).internal.getNumberOfPages());
+      addFooter(doc.getNumberOfPages(), (doc as any).internal.getNumberOfPages());
       doc.addPage();
-      addHeader(doc.internal.getNumberOfPages());
+      addHeader(doc.getNumberOfPages());
       yPos = 60;
     }
     
     doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     doc.setFontSize(12);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('Helvetica', 'bold');
     doc.text('VTU GRADING SCALE', pageWidth / 2, yPos, { align: 'center' });
     
     yPos += 8;
@@ -391,7 +391,7 @@ export default function CalculatorPage() {
     doc.rect(margin, yPos, pageWidth - 2 * margin, 32, 'F');
     
     doc.setFontSize(9);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('Helvetica', 'normal');
     
     const grades = [
       ['90-100: O (10)', '80-89: A+ (9)', '70-79: A (8)', '60-69: B+ (7)'],
@@ -406,7 +406,7 @@ export default function CalculatorPage() {
       });
     });
     
-    const totalPages = doc.internal.getNumberOfPages();
+    const totalPages = doc.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);
       addFooter(i, totalPages);

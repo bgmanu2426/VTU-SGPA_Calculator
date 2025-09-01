@@ -1,63 +1,87 @@
-# VTU SGPA Calculator
+## VTU SGPA & CGPA Calculator
 
-During my Engineering journey as a VTU student, I noticed one common frustration calculating SGPA & CGPA manually every semester.
+Fast, accurate VTU SGPA and CGPA calculator with AI-powered marksheet extraction, manual entry, and clean PDF exports. Built with Next.js, TypeScript, Tailwind, and ShadCN UI.
 
-When results are published in marks, we have to manually calculate the SGPA for each semester and then the CGPA… or rely on online tools where we still need to type subject names, codes, internals, and externals manually. It’s time-consuming, error-prone, and honestly… not the best way to spend your time after a long exam season. 😅
+![Home – wide](public/screenshots/screenshot-wide-home.png)
+![Upload – wide](public/screenshots/screenshot-wide-upload.png)
 
-## My Solution
+### Highlights
+- Upload your VTU marksheet (PDF/Image) to auto-extract subjects, internals/externals, and credits using Gemini via Genkit.
+- Manual entry flow when you don’t have a file or want full control.
+- Accurate SGPA calculation + dedicated CGPA calculator.
+- One-click PDF export of results.
+- PWA: install to your phone for an app-like experience, offline-ready basics.
 
- I built a VTU SGPA & CGPA Calculator 🧮 using Next.js + TypeScript + Gemini AI + Radix UI, hosted on Vercel, making the process quick, accurate, and stress-free!
+---
 
-Just upload the screenshot or PDF of your original result and boom you get your SGPA instantly ✨
+## Mobile app download
 
-![VTU SGPA Calculator Screenshot](/public/images/home.png)
+- Android (APK direct download): REPLACE_WITH_APK_LINK
+- iOS: Install the PWA from Safari (open the site, tap Share → Add to Home Screen).
 
-## Core Features
+Tip: This app is a PWA. Users on Android and iOS can install it directly from the browser as “Add to Home Screen” or "Install App" if a store link isn’t available yet.
 
--   **Marksheet Input**: Upload marksheet images (PNG, JPG) or PDFs.
--   **AI Data Extraction**: Uses Google's Gemini model via Genkit to automatically extract student details, subject information, and marks from the marksheet.
--   **Manual Entry**: A user-friendly form for manual entry of marks if an image is unavailable or extraction fails.
--   **SGPA Calculation**: Accurately calculates SGPA based on extracted marks and credits.
--   **CGPA Calculator**: A separate tool to calculate overall CGPA from individual semester SGPA scores.
--   **Downloadable Reports**: Generate and download a professional-looking SGPA report in PDF format.
--   **Responsive Design**: Fully responsive interface built with ShadCN UI and Tailwind CSS.
+---
 
-## Tech Stack
+## Live site
 
--   **Framework**: [Next.js](https://nextjs.org/) (with App Router)
--   **Language**: [TypeScript](https://www.typescriptlang.org/)
--   **AI/Generative**: [Firebase Genkit](https://firebase.google.com/docs/genkit) with [Google's Gemini API](https://ai.google.dev/)
--   **UI Components**: [ShadCN UI](https://ui.shadcn.com/)
--   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+The live site is hosted on Vercel.
 
-## Getting Started
+- Live URL: https://vtusgpacalculator.vercel.app
 
-To run the project locally, follow these steps:
+---
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/bgmanu2426/VTU-SGPA_Calculator.git
-    cd VTU-SGPA_Calculator
-    ```
+## How it works
+1. Upload a VTU marksheet (PNG/JPG/PDF) or choose manual entry.
+2. The AI flow extracts subject data and marks using Genkit + Gemini.
+3. Credits are fetched per scheme and combined with marks to compute SGPA.
+4. Export or share a polished PDF. Use the CGPA tool to aggregate semester SGPAs.
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+---
 
-3.  **Set up environment variables:**
-    Create a `.env` file in the root of the project and add your Google AI API key:
-    ```
-    GEMINI_API_KEY=your_google_ai_api_key
-    ```
+## Tech stack
+- Next.js (App Router) + TypeScript
+- Tailwind CSS + ShadCN UI (Radix primitives)
+- Genkit + Google Gemini for data extraction
+- PWA enhancements (installable on mobile)
 
-4.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
+---
 
-The application should now be running on [http://localhost:9002](http://localhost:9002).
+## Getting started (local)
+
+1) Clone and install
+```bash
+git clone https://github.com/bgmanu2426/VTU-SGPA_Calculator.git
+cd VTU-SGPA_Calculator
+npm install
+```
+
+2) Env vars
+Create a `.env` in the project root:
+```
+GEMINI_API_KEY=your_google_ai_api_key
+```
+
+3) Run dev server
+```bash
+npm run dev
+```
+App runs at http://localhost:9002
+
+---
+
+## Project structure
+- `src/app` – App Router pages (home, calculator, CGPA, upload)
+- `src/components` – UI components and calculators
+- `src/ai` – Genkit flows (marksheet extraction, credits fetching)
+- `public/` – PWA manifest, icons, screenshots
+
+---
+
+## Contributing
+Issues and PRs are welcome. Please open an issue to discuss significant changes.
+
+---
 
 ## License
-
-This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md) file for details.
+MIT – see [LICENSE.md](LICENSE.md).

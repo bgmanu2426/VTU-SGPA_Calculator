@@ -46,3 +46,7 @@ firestore-debug.log
 /.idx
 dev.nix
 .modified
+
+#pwa
+sw.js
+workbox-*.js
